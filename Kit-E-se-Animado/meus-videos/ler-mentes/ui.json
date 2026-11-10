@@ -1,0 +1,40 @@
+{
+  "duracao": 65.3,
+  "palavrasPorLegenda": 3,
+  "destaques": [],
+  "trocas": {},
+  "elementos": [
+    {
+      "tipo": "contador",
+      "de": 0,
+      "ate": 6200,
+      "rotulo": "PENSAMENTOS POR DIA",
+      "inicio": 17.5,
+      "fim": 22.9,
+      "duracaoConta": 1.6
+    },
+    {
+      "tipo": "placa",
+      "numero": "47%",
+      "rotulo": "DO TEMPO COM A MENTE LONGE",
+      "inicio": 23.4,
+      "fim": 28.5
+    },
+    {
+      "tipo": "pill",
+      "texto": "ALMOÇO DE DOMINGO",
+      "inicio": 28.9,
+      "fim": 31.4
+    },
+    {
+      "tipo": "contador",
+      "de": 0,
+      "ate": 310000,
+      "rotulo": "PENSAMENTOS NO ÔNIBUS, POR DIA",
+      "inicio": 46.7,
+      "fim": 49.6,
+      "duracaoConta": 1.4
+    }
+  ],
+  "semLegenda": true
+}

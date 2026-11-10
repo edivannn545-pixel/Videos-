@@ -1,0 +1,2 @@
+Fraunces e Caveat são fontes livres (SIL Open Font License 1.1), que permite uso, cópia e redistribuição.
+Fraunces: github.com/undercasetype/Fraunces · Caveat: github.com/googlefonts/caveat

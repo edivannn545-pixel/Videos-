@@ -28,7 +28,7 @@ export function gerarUI(P) {
   grupos.forEach((g, i) => {
     const a = g[0].start, nxt = grupos[i + 1] ? grupos[i + 1][0].start : T - .4, end = grupos[i + 1] ? Math.min(Math.max(g.at(-1).end + .05, g.at(-1).end + .35), nxt) : g.at(-1).end + .6;
     const sp = g.map(x => `<span style="color:${destaques.has(limpa(x.text)) ? '#F2C14E' : '#fff'}">${esc(x.text)}</span>`).join(' ');
-    H.push(`<div id="cap${i}" class="clip capg" data-start="${a.toFixed(3)}" data-duration="${(end - a).toFixed(3)}">${sp}</div>`);
+    if (!cfg.semLegenda) H.push(`<div id="cap${i}" class="clip capg" data-start="${a.toFixed(3)}" data-duration="${(end - a).toFixed(3)}">${sp}</div>`);
   });
   for (const [n, e] of (cfg.elementos || []).entries()) {
     const id = `el${n}`, a = e.inicio, dur = (e.fim - e.inicio).toFixed(3);
