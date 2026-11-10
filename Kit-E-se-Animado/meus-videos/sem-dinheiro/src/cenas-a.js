@@ -73,7 +73,7 @@ export function shotContas(t0, t1) { const s = makeShot(t0, t1, '#F1D9B4', 38), 
   c.add(new THREE.HemisphereLight('#FFF2DC', '#9A6A4A', 1.0)); const sun = new THREE.DirectionalLight('#FFE0A8', 2.2); sun.position.set(-4, 7, 3); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, far: 30 }); sun.shadow.radius = 4; c.add(sun);
   // planta desfocada na frente
   for (let i = 0; i < 7; i++) { const l = new THREE.Mesh(new THREE.SphereGeometry(.22, 10, 8), std(i % 2 ? '#3E7A44' : '#55934F')); l.scale.set(.6, 1.8, .3); l.position.set(-1.2 + Math.sin(i * 2.3) * .3, 1.2 + (i % 3) * .2, 3.2); l.rotation.z = Math.sin(i * 2.3) * .6; c.add(l); }
-  const hero = makeChar({ outfit: 'hero', glow: .14 }); hero.place(-.45, -.4); c.add(hero.root); hero.tint('#FFF4E6');
+  const hero = makeChar({ outfit: 'hero', glow: .14 }); hero.place(-.15, -.4); c.add(hero.root); hero.tint('#FFF4E6');
   s.update = (t, u) => { contas.forEach((k) => { const g = smooth(k.at, k.at + .5, u); k.m.material.opacity = 1 - g; k.m.visible = g < .99; k.mg.visible = g < .5; k.p(u); });
     hero.face(s.camera);
     if (u < 1.6) { hero.pose({ armL: [8, 6], armR: [8, 6], head: 4 }); hero.eye(u < 1.0 ? 'look' : 'wide'); }

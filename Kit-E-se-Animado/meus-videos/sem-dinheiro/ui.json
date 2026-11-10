@@ -17,7 +17,10 @@
     "ideia",
     "sardinha"
   ],
-  "trocas": {},
+  "trocas": {
+    "Etem": "E tem",
+    "Eaquela": "E aquela"
+  },
   "elementos": [
     {
       "tipo": "etiqueta",
