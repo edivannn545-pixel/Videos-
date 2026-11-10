@@ -1,0 +1,55 @@
+{
+  "duracao": 67.5,
+  "palavrasPorLegenda": 3,
+  "destaques": [
+    "vazia",
+    "zero",
+    "sumiu",
+    "dívidas",
+    "padaria",
+    "sapato",
+    "salário",
+    "caminhão",
+    "mercado",
+    "peixe",
+    "papel",
+    "tela",
+    "ideia",
+    "sardinha"
+  ],
+  "trocas": {},
+  "elementos": [
+    {
+      "tipo": "etiqueta",
+      "texto": "7:02",
+      "inicio": 0.2,
+      "fim": 3.4
+    },
+    {
+      "tipo": "pill",
+      "texto": "TODO O DINHEIRO DO MUNDO: R$ 0",
+      "inicio": 7.25,
+      "fim": 9.7
+    },
+    {
+      "tipo": "etiqueta",
+      "texto": "EUA",
+      "inicio": 43.9,
+      "fim": 47.6
+    },
+    {
+      "tipo": "placa",
+      "numero": "1 lata ≈ US$ 1",
+      "rotulo": "MOEDA NAS PRISÕES",
+      "inicio": 48.9,
+      "fim": 51.0
+    },
+    {
+      "tipo": "placa",
+      "numero": "~90%",
+      "rotulo": "DO DINHEIRO NÃO É PAPEL",
+      "inicio": 52.2,
+      "fim": 57.4
+    }
+  ]
+}
