@@ -5,9 +5,9 @@
   {
    "id": "c01",
    "start": 0,
-   "end": 1.0,
+   "end": 2.95,
    "line": "",
-   "scene": "wide: avô na cama, você entra; push",
+   "scene": "3D sem corte: cidade do alto, desce, entra pela janela do hospital, você e o avô no quarto",
    "set": "hospital",
    "bars": "none",
    "in": {
@@ -16,21 +16,26 @@
    },
    "sfx": [
     {
-     "at": 0.1,
-     "name": "hum",
-     "gain": -20,
-     "dur": 1
+     "at": 0.0,
+     "name": "wind",
+     "gain": -18,
+     "dur": 1.6
+    },
+    {
+     "at": 1.5,
+     "name": "whoosh",
+     "gain": -8
     }
    ],
    "captions": false,
    "notes": ""
   },
   {
-   "id": "c02",
-   "start": 1.0,
-   "end": 2.0,
+   "id": "c04",
+   "start": 2.95,
+   "end": 4.25,
    "line": "",
-   "scene": "insert: as mãos se seguram",
+   "scene": "bigFace avô: dor vira alívio com brilho verde",
    "set": "hospital",
    "bars": "none",
    "in": {
@@ -40,49 +45,11 @@
    "sfx": [
     {
      "at": 0.2,
-     "name": "swish",
-     "gain": -14
-    }
-   ],
-   "captions": false,
-   "notes": ""
-  },
-  {
-   "id": "c03",
-   "start": 2.0,
-   "end": 3.0,
-   "line": "",
-   "scene": "bigFace avô com dor",
-   "set": "hospital",
-   "bars": "none",
-   "in": {
-    "type": "cut",
-    "dur": 0.3
-   },
-   "sfx": [],
-   "captions": false,
-   "notes": ""
-  },
-  {
-   "id": "c04",
-   "start": 3.0,
-   "end": 4.25,
-   "line": "",
-   "scene": "brilho verde, avô aliviado",
-   "set": "hospital",
-   "bars": "none",
-   "in": {
-    "type": "flash",
-    "dur": 0.3
-   },
-   "sfx": [
-    {
-     "at": 0.4,
      "name": "shimmer",
      "gain": -6
     },
     {
-     "at": 0.45,
+     "at": 0.25,
      "name": "powerup",
      "gain": -10
     }

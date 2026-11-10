@@ -32,17 +32,30 @@ const hospital = (g, t, cam, o = {}) => { const r = sala(g, t, cam, { mood: 'int
 function avoNaCama(g, x, GY, M, t, o = {}) { cama(g, x - 240, GY, M, { w: 480, cor: '#dfe8f0' }); drawFigure(g, { x: x - 90, y: GY - 120, s: 1.75, facing: 1, outfit: o.outfit || AVO, pose: breathe(POSES.sitBack, t, 0.6), expr: o.expr || 'sad', rim: { color: M.rim, dir: [1, -0.6] }, shadow: false, blink: (t % 3.3) > 3.2 });
   rr(g, x - 110, GY - 175, 350, 60, 20); g.fillStyle = '#b8c8e0'; g.fill(); g.fillStyle = 'rgba(255,255,255,.2)'; g.fillRect(x - 150, GY - 175, 410, 6); }
 
-registerShot('c01', { draw(g, t, info) { const cam = push(t, info.dur, 0.92, 1.0, -40, 20); const { GY, M } = hospital(g, t, cam);
-  layer(g, cam, 1, (g) => { avoNaCama(g, E.W / 2 + 140, GY, M, t); const x = lerp(E.W / 2 - 420, E.W / 2 - 300, ease.out(t / info.dur)); drawFigure(g, { x, y: GY, s: 2.0, facing: 1, outfit: VOCE, pose: walkPose(t * 6.28 * 0.9), expr: 'worried', rim: { color: M.rim, dir: [1, -0.6] } }); });
-  FX.dust(g, t, { count: 30, color: '#e6f4ff', a: 0.3 });
-} });
-registerShot('c02', { draw(g, t, info) { blurLayer(g, 14, (g) => hospital(g, t, { z: 1.5, y: -200 })); veil(g, '#08101a', 0.35); const M = mood('interiorCool'); const k = ease.out(prog(t, 0, 0.5)); const z = 1 + 0.06 * t;
-  g.save(); g.translate(E.W / 2, E.H / 2); g.scale(z, z); g.translate(-E.W / 2, -E.H / 2);
-  mao(g, E.W / 2 + 40, E.H * 0.5, 1.5, true, AVO.color, M.rim, { lado: -1 }); mao(g, lerp(E.W * 1.1, E.W / 2 + 90, k), E.H * 0.5 + 40, 1.5, true, VOCE.color, M.rim); g.restore();
-} });
-registerShot('c03', { draw(g, t, info) { blurLayer(g, 14, (g) => hospital(g, t, { z: 1.4, x: 120, y: -120 })); veil(g, '#08101a', 0.4); const M = mood('interiorCool');
-  bigFace(g, E.W / 2, E.H * 0.55, 330 * (1 + 0.05 * t), { outfit: AVO, expr: 'cry', look: [0.3, 0.2], rimColor: M.rim, rimSide: -1 });
-} });
+registerShot('c01', { kind: '3d',
+  init(T) { const M = mood('golden'); const st = T.stage({ mood: 'golden', fov: 50, fog: [60, 240], keyPos: [-30, 50, 30], keyIntensity: 3.0, ambient: 1.5 }); const { THREE } = T;
+    st.add(T.ground(500, 500, M.road, T.tiles(M.road, 50, [50, 50])));
+    let sd = 11; for (let ix = -6; ix <= 6; ix++) for (let iz = -6; iz <= 3; iz++) { if (Math.abs(ix) <= 1 && iz >= -1) continue; const h = 6 + ((ix * 7 + iz * 13 + 40) % 7) * 3; const b = T.building(9, h, 9, { color: ['#5a3a34', '#4a3646', '#3d3360', '#6b4a3a'][(ix + iz + 8) % 4], win: M.practical, lit: 0.25, seed: sd++ }); b.position.set(ix * 14, 0, iz * 14 - 10); st.add(b); }
+    for (let i = -10; i <= 10; i++) st.add(T.tree3D(i * 7, 8, 1.2, '#2a3a2a'));
+    // hospital: fachada com abertura de janela no 3º andar (y 11.6–13.6, x -1.6..1.6)
+    const W = '#dfe6ec', F = 0; const wall = (w, h, x, y) => T.box(w, h, 0.4, W, x, y, F);
+    st.add(wall(7.4, 11.6, -4.9, 5.8), wall(7.4, 11.6, 4.9, 5.8), wall(3.2, 11.6, 0, 5.8), wall(18, 8.4, 0, 17.8), wall(7.4, 2, -4.9, 12.6), wall(7.4, 2, 4.9, 12.6));
+    st.add(T.box(0.4, 22, 14, '#c8d0d8', -9, 11, -7.2), T.box(0.4, 22, 14, '#c8d0d8', 9, 11, -7.2), T.box(18, 22, 0.4, '#c8d0d8', 0, 11, -14.2), T.box(18, 0.4, 14, '#c8d0d8', 0, 22, -7.2), T.box(18, 0.3, 14, '#8a96a2', 0, 10.95, -7.2), T.box(18, 0.3, 14, '#8a96a2', 0, 14.45, -7.2)); for (const z of [-0.3]) st.add(T.box(18.4, 0.4, 0.6, '#9aa6b2', 0, 11.4, z), T.box(18.4, 0.4, 0.6, '#9aa6b2', 0, 7.4, z), T.box(18.4, 0.4, 0.6, '#9aa6b2', 0, 15.4, z));
+    for (const [x, y] of [[-5, 4.5], [5, 4.5], [-5, 9], [5, 9], [-5, 17], [0, 17], [5, 17]]) { const w = T.windowPane(2.6, 1.8, { glowColor: '#e6f4ff', cols: 2, rows: 1, power: 0.7 }); w.position.set(x, y, 0.25); st.add(w); }
+    const cruz = new THREE.Group(); cruz.add(T.box(2.4, 0.8, 0.3, '#c9472f', 0, 0, 0), T.box(0.8, 2.4, 0.3, '#c9472f', 0, 0, 0)); cruz.position.set(0, 20.2, 0.4); st.add(cruz);
+    // quarto (atrás da janela, sem a parede da frente)
+    st.add(T.box(10, 0.2, 10, '#5a6a7a', 0, 11.1, -5.2), T.box(10, 3.2, 0.2, '#6a8aa0', 0, 12.7, -10), T.box(0.2, 3.2, 10, '#6a8aa0', -4.9, 12.7, -5.2), T.box(0.2, 3.2, 10, '#6a8aa0', 4.9, 12.7, -5.2), T.box(10, 0.2, 10, '#e8eef2', 0, 14.3, -5.2));
+    const cama = new THREE.Group(); cama.add(T.box(2.2, 0.5, 1.1, '#e8eef2', 0, 0.45, 0), T.box(0.12, 1.1, 1.1, '#9aa6b2', 1.05, 0.55, 0), T.box(1.0, 0.35, 1.05, '#b8c8e0', -0.3, 0.75, 0)); cama.position.set(0.9, 11.2, -7); st.add(cama);
+    st.add(T.box(0.05, 1.9, 0.05, '#9aa6b2', 2.4, 12.15, -7.6), T.box(0.35, 0.45, 0.1, '#bfe4ff', 2.4, 13.0, -7.6));
+    const tela = T.windowPane(1.1, 0.7, { glowColor: '#7dffa8', cols: 1, rows: 1, power: 0.9 }); tela.position.set(-2.2, 13.0, -9.85); st.add(tela);
+    const luz = new THREE.PointLight('#fff0dc', 14, 14, 1.4); luz.position.set(0, 13.9, -5); st.add(luz); const luz2 = new THREE.PointLight('#cfe8ff', 6, 10, 1.4); luz2.position.set(0, 12.8, -1.5); st.add(luz2);
+    const avo = T.figure3D(AVO, { rim: '#ffd39b', pose: POSES.sitBack }); avo.position.set(1.2, 11.75, -7); avo.rotation.y = Math.PI; st.add(avo);
+    const voce = T.figure3D(VOCE, { rim: '#7dffa8', pose: POSES.stand }); voce.position.set(-0.7, 11.2, -7); st.add(voce);
+    return { stage: st, voce }; },
+  draw(s, t, info, T) { s.voce.setPose(blend(t)); 
+    T.dolly(s.stage.camera, t, [[0, { pos: [26, 62, 70], look: [0, 12, 0] }], [1.1, { pos: [8, 28, 36], look: [0, 12.5, 0] }], [1.9, { pos: [0, 12.8, 9], look: [0, 12.6, -2] }], [2.3, { pos: [0, 12.6, 0.8], look: [0.2, 12.3, -7] }], [info.dur, { pos: [0.05, 12.45, -0.4], look: [0.25, 12.1, -7] }]]); },
+  overlay(g, t) { FX.dust(g, t, { count: 30, color: '#ffe8c0', a: 0.25 }); } });
+const blend = (t) => { const k = clamp((t - 2.2) / 0.5); const a = POSES.stand, b = { ...POSES.reach, hF: [52, -150], eF: [30, -150] }; const o = {}; for (const key in a) o[key] = [a[key][0] + (b[key][0] - a[key][0]) * k, a[key][1] + (b[key][1] - a[key][1]) * k]; return o; };
 registerShot('c04', { draw(g, t, info) { blurLayer(g, 14, (g) => hospital(g, t, { z: 1.4, x: 120, y: -120 })); veil(g, '#08101a', 0.35); const M = mood('interiorCool'); const k = ease.out(prog(t, 0.3, 0.8));
   bigFace(g, E.W / 2, E.H * 0.55, 330 * (1 + 0.05 * t), { outfit: AVO, expr: t < 0.45 ? 'surprised' : 'joy', look: [0, 0], rimColor: CURA, rimSide: -1 });
   brilho(g, E.W / 2, E.H * 0.85, t, k); FX.dust(g, t, { count: 60, color: CURA, a: 0.5 * k, speed: 40 });
