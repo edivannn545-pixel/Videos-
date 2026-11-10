@@ -1,0 +1,490 @@
+[
+ {
+  "i": 0,
+  "start": 0.0,
+  "speechStart": 0.0,
+  "speechEnd": 1.92,
+  "text": "Você acorda, desliga o despertador…",
+  "end": 1.77
+ },
+ {
+  "i": 1,
+  "start": 1.77,
+  "speechStart": 1.92,
+  "speechEnd": 4.02,
+  "text": "e ele vira pó na sua mão.",
+  "end": 4.93
+ },
+ {
+  "i": 2,
+  "start": 4.93,
+  "speechStart": 5.08,
+  "speechEnd": 7.02,
+  "text": "Durante a noite, seu corpo mudou.",
+  "end": 8.25
+ },
+ {
+  "i": 3,
+  "start": 8.25,
+  "speechStart": 8.4,
+  "speechEnd": 11.56,
+  "text": "Agora você é cinquenta vezes mais forte do que qualquer ser humano.",
+  "end": 12.45
+ },
+ {
+  "i": 4,
+  "start": 12.45,
+  "speechStart": 12.6,
+  "speechEnd": 15.8,
+  "text": "Algumas formigas carregam até cinquenta vezes o próprio peso.",
+  "end": 16.87
+ },
+ {
+  "i": 5,
+  "start": 16.87,
+  "speechStart": 17.02,
+  "speechEnd": 18.82,
+  "text": "Agora, a formiga é você.",
+  "end": 19.75
+ },
+ {
+  "i": 6,
+  "start": 19.75,
+  "speechStart": 19.9,
+  "speechEnd": 21.36,
+  "text": "Parece o sonho de qualquer um.",
+  "end": 21.71
+ },
+ {
+  "i": 7,
+  "start": 21.71,
+  "speechStart": 21.86,
+  "speechEnd": 23.46,
+  "text": "Mas a força tem um preço.",
+  "end": 24.01
+ },
+ {
+  "i": 8,
+  "start": 24.01,
+  "speechStart": 24.16,
+  "speechEnd": 27.56,
+  "text": "E esse preço não aparece nos filmes. Primeiro minuto.",
+  "end": 27.87
+ },
+ {
+  "i": 9,
+  "start": 27.87,
+  "speechStart": 28.02,
+  "speechEnd": 29.3,
+  "text": "Você vai escovar os dentes.",
+  "end": 29.15
+ },
+ {
+  "i": 10,
+  "start": 29.15,
+  "speechStart": 29.3,
+  "speechEnd": 30.86,
+  "text": "A escova quebra.",
+  "end": 31.05
+ },
+ {
+  "i": 11,
+  "start": 31.05,
+  "speechStart": 31.2,
+  "speechEnd": 32.54,
+  "text": "A torneira sai na mão.",
+  "end": 32.87
+ },
+ {
+  "i": 12,
+  "start": 32.87,
+  "speechStart": 33.02,
+  "speechEnd": 34.26,
+  "text": "A maçaneta entorta.",
+  "end": 35.19
+ },
+ {
+  "i": 13,
+  "start": 35.19,
+  "speechStart": 35.34,
+  "speechEnd": 38.4,
+  "text": "Um homem adulto aperta a mão com uns cinquenta quilos de força.",
+  "end": 39.25
+ },
+ {
+  "i": 14,
+  "start": 39.25,
+  "speechStart": 39.4,
+  "speechEnd": 41.74,
+  "text": "Você aperta com mais de duas toneladas.",
+  "end": 42.21
+ },
+ {
+  "i": 15,
+  "start": 42.21,
+  "speechStart": 42.36,
+  "speechEnd": 45.52,
+  "text": "Então, no café da manhã, você aprende a regra número um:",
+  "end": 46.01
+ },
+ {
+  "i": 16,
+  "start": 46.01,
+  "speechStart": 46.16,
+  "speechEnd": 47.8,
+  "text": "tudo é feito de vidro.",
+  "end": 48.53
+ },
+ {
+  "i": 17,
+  "start": 48.53,
+  "speechStart": 48.68,
+  "speechEnd": 51.98,
+  "text": "Copo, celular, a mão de quem você cumprimenta.",
+  "end": 52.79
+ },
+ {
+  "i": 18,
+  "start": 52.79,
+  "speechStart": 52.94,
+  "speechEnd": 54.64,
+  "text": "Mas isso é só o começo.",
+  "end": 55.75
+ },
+ {
+  "i": 19,
+  "start": 55.75,
+  "speechStart": 55.9,
+  "speechEnd": 58.52,
+  "text": "Porque logo você descobre as suas pernas.",
+  "end": 58.37
+ },
+ {
+  "i": 20,
+  "start": 58.37,
+  "speechStart": 58.52,
+  "speechEnd": 62.92,
+  "text": "Você dobra os joelhos e pula. Bem de leve.",
+  "end": 63.91
+ },
+ {
+  "i": 21,
+  "start": 63.91,
+  "speechStart": 64.06,
+  "speechEnd": 67.46,
+  "text": "Uma pessoa comum pula uns quarenta centímetros.",
+  "end": 67.79
+ },
+ {
+  "i": 22,
+  "start": 67.79,
+  "speechStart": 67.94,
+  "speechEnd": 72.36,
+  "text": "Com cinquenta vezes a força, numa conta simples, você passa de dez andares.",
+  "end": 73.55
+ },
+ {
+  "i": 23,
+  "start": 73.55,
+  "speechStart": 73.7,
+  "speechEnd": 76.76,
+  "text": "Por um segundo, é a melhor sensação da sua vida.",
+  "end": 77.57
+ },
+ {
+  "i": 24,
+  "start": 77.57,
+  "speechStart": 77.72,
+  "speechEnd": 79.62,
+  "text": "Lá de cima, você vê o bairro inteiro.",
+  "end": 80.43
+ },
+ {
+  "i": 25,
+  "start": 80.43,
+  "speechStart": 80.58,
+  "speechEnd": 83.6,
+  "text": "Só que tudo que sobe… desce.",
+  "end": 84.31
+ },
+ {
+  "i": 26,
+  "start": 84.31,
+  "speechStart": 84.46,
+  "speechEnd": 88.46,
+  "text": "De dez andares, você chega ao chão a quase cem quilômetros por hora.",
+  "end": 89.37
+ },
+ {
+  "i": 27,
+  "start": 89.37,
+  "speechStart": 89.52,
+  "speechEnd": 91.84,
+  "text": "E aí vem o problema que ninguém resolve.",
+  "end": 92.71
+ },
+ {
+  "i": 28,
+  "start": 92.71,
+  "speechStart": 92.86,
+  "speechEnd": 94.14,
+  "text": "Seus músculos mudaram.",
+  "end": 94.99
+ },
+ {
+  "i": 29,
+  "start": 94.99,
+  "speechStart": 95.14,
+  "speechEnd": 96.66,
+  "text": "Seus ossos e tendões, não.",
+  "end": 97.25
+ },
+ {
+  "i": 30,
+  "start": 97.25,
+  "speechStart": 97.4,
+  "speechEnd": 100.04,
+  "text": "O tendão do seu calcanhar é o mais forte do corpo.",
+  "end": 101.35
+ },
+ {
+  "i": 31,
+  "start": 101.35,
+  "speechStart": 101.5,
+  "speechEnd": 104.66,
+  "text": "Correndo, ele já aguenta umas doze vezes o seu peso.",
+  "end": 104.95
+ },
+ {
+  "i": 32,
+  "start": 104.95,
+  "speechStart": 105.1,
+  "speechEnd": 110.38,
+  "text": "Agora, cada passo puxa esse tendão com uma força que ele nunca foi feito para aguentar.",
+  "end": 111.19
+ },
+ {
+  "i": 33,
+  "start": 111.19,
+  "speechStart": 111.34,
+  "speechEnd": 114.68,
+  "text": "O seu maior inimigo virou… você mesmo.",
+  "end": 115.13
+ },
+ {
+  "i": 34,
+  "start": 115.13,
+  "speechStart": 115.28,
+  "speechEnd": 117.7,
+  "text": "Seus músculos podem arrancar os próprios ossos.",
+  "end": 118.59
+ },
+ {
+  "i": 35,
+  "start": 118.59,
+  "speechStart": 118.74,
+  "speechEnd": 120.72,
+  "text": "E ainda falta um detalhe.",
+  "end": 121.35
+ },
+ {
+  "i": 36,
+  "start": 121.35,
+  "speechStart": 121.5,
+  "speechEnd": 122.86,
+  "text": "Força gasta energia.",
+  "end": 123.41
+ },
+ {
+  "i": 37,
+  "start": 123.41,
+  "speechStart": 123.56,
+  "speechEnd": 125.74,
+  "text": "Cada movimento pesado queima comida.",
+  "end": 126.17
+ },
+ {
+  "i": 38,
+  "start": 126.17,
+  "speechStart": 126.32,
+  "speechEnd": 130.26,
+  "text": "Se você usar essa força de verdade, vai precisar comer muito mais.",
+  "end": 130.85
+ },
+ {
+  "i": 39,
+  "start": 130.85,
+  "speechStart": 131.0,
+  "speechEnd": 132.3,
+  "text": "A geladeira dura um dia.",
+  "end": 132.61
+ },
+ {
+  "i": 40,
+  "start": 132.61,
+  "speechStart": 132.76,
+  "speechEnd": 134.6,
+  "text": "O mercado do bairro, uma semana.",
+  "end": 135.09
+ },
+ {
+  "i": 41,
+  "start": 135.09,
+  "speechStart": 135.24,
+  "speechEnd": 137.24,
+  "text": "Até aqui, parece só azar.",
+  "end": 137.09
+ },
+ {
+  "i": 42,
+  "start": 137.09,
+  "speechStart": 137.24,
+  "speechEnd": 140.54,
+  "text": "Mas a ciência explica por que isso nunca daria certo.",
+  "end": 141.05
+ },
+ {
+  "i": 43,
+  "start": 141.05,
+  "speechStart": 141.2,
+  "speechEnd": 145.3,
+  "text": "Em 1638, Galileu percebeu uma coisa simples.",
+  "end": 145.95
+ },
+ {
+  "i": 44,
+  "start": 145.95,
+  "speechStart": 146.1,
+  "speechEnd": 151.0,
+  "text": "Quando um corpo cresce, o peso aumenta muito mais rápido do que a força dos ossos.",
+  "end": 151.45
+ },
+ {
+  "i": 45,
+  "start": 151.45,
+  "speechStart": 151.6,
+  "speechEnd": 155.48,
+  "text": "É por isso que uma formiga parece super forte. Ela é pequena.",
+  "end": 156.05
+ },
+ {
+  "i": 46,
+  "start": 156.05,
+  "speechStart": 156.2,
+  "speechEnd": 158.6,
+  "text": "A força dela é grande para o tamanho dela.",
+  "end": 159.75
+ },
+ {
+  "i": 47,
+  "start": 159.75,
+  "speechStart": 159.9,
+  "speechEnd": 163.42,
+  "text": "Se uma formiga tivesse o seu tamanho, ela não carregaria nada.",
+  "end": 165.11
+ },
+ {
+  "i": 48,
+  "start": 165.11,
+  "speechStart": 165.26,
+  "speechEnd": 168.76,
+  "text": "Provavelmente, mal conseguiria ficar em pé. Ou seja:",
+  "end": 169.31
+ },
+ {
+  "i": 49,
+  "start": 169.31,
+  "speechStart": 169.46,
+  "speechEnd": 173.36,
+  "text": "a evolução não esqueceu de te dar superforça.",
+  "end": 173.21
+ },
+ {
+  "i": 50,
+  "start": 173.21,
+  "speechStart": 173.36,
+  "speechEnd": 175.18,
+  "text": "Ela escolheu o equilíbrio.",
+  "end": 175.57
+ },
+ {
+  "i": 51,
+  "start": 175.57,
+  "speechStart": 175.72,
+  "speechEnd": 179.02,
+  "text": "Músculos, ossos e tendões feitos uns para os outros.",
+  "end": 180.37
+ },
+ {
+  "i": 52,
+  "start": 180.37,
+  "speechStart": 180.52,
+  "speechEnd": 183.8,
+  "text": "Ser cinquenta vezes mais forte não te transformaria num herói.",
+  "end": 184.73
+ },
+ {
+  "i": 53,
+  "start": 184.73,
+  "speechStart": 184.88,
+  "speechEnd": 188.2,
+  "text": "Te transformaria em alguém que precisa ter medo de abraçar.",
+  "end": 189.19
+ },
+ {
+  "i": 54,
+  "start": 189.19,
+  "speechStart": 189.34,
+  "speechEnd": 191.88,
+  "text": "E no fim do dia, você volta para casa.",
+  "end": 192.73
+ },
+ {
+  "i": 55,
+  "start": 192.73,
+  "speechStart": 192.88,
+  "speechEnd": 194.86,
+  "text": "Olha o despertador quebrado.",
+  "end": 194.71
+ },
+ {
+  "i": 56,
+  "start": 194.71,
+  "speechStart": 194.86,
+  "speechEnd": 197.38,
+  "text": "E percebe que a coisa mais difícil agora…",
+  "end": 198.43
+ },
+ {
+  "i": 57,
+  "start": 198.43,
+  "speechStart": 198.58,
+  "speechEnd": 202.38,
+  "text": "é ser delicado. E você?",
+  "end": 203.79
+ },
+ {
+  "i": 58,
+  "start": 203.79,
+  "speechStart": 203.94,
+  "speechEnd": 207.88,
+  "text": "Qual seria a primeira coisa que você faria com cinquenta vezes mais força?",
+  "end": 209.33
+ },
+ {
+  "i": 59,
+  "start": 209.33,
+  "speechStart": 209.48,
+  "speechEnd": 210.86,
+  "text": "Escreve aqui nos comentários.",
+  "end": 212.25
+ },
+ {
+  "i": 60,
+  "start": 212.25,
+  "speechStart": 212.4,
+  "speechEnd": 216.58,
+  "text": "E se inscreve, que no próximo vídeo a gente quebra outra regra do corpo humano.",
+  "end": 218.08
+ }
+]

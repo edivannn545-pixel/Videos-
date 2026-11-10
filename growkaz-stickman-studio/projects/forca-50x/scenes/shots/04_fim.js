@@ -1,0 +1,144 @@
+// 04_fim.js — s042–s068: fome, Galileu, formiga gigante, equilíbrio e final.
+import { E, V, S, registerShot, mood, layer, blurLayer, veil, ease, prog, key, clamp, lerp, shake, seg, circle, ring, rr, poly, glow, alpha, shade, linGrad, backdrop, text, measure, FONTS } from '/engine/core.js';
+import { drawFigure, POSES, posesAt, breathe, walkPose, bigFace } from '/engine/rig2d.js';
+import * as FX from '/engine/fx2d.js';
+import * as UI from '/engine/ui2d.js';
+import { sala, mesinha, despertador, cama } from '../sets/casa.js';
+import { rua, telhado, mercado, jardim } from '../sets/rua.js';
+import { formiga, folha, carro, mao, capa, bolha } from '../sets/props.js';
+import { cozinha } from './02_casa.js';
+import { quarto } from './01_manha.js';
+import { VOCE, AMIGO, DOC, GALILEU, CAST } from '../cast.js';
+
+const big = (g, label, value, x, y, a = 1, color) => UI.readout(g, { label, value, x, y, align: 'center', a, size: 92, color });
+const comida = (g, x, y, k, s = 1) => { g.save(); g.translate(x, y); g.scale(s, s); const tipo = k % 3; if (tipo === 0) { circle(g, 0, 0, 30, '#c8813e'); seg(g, [[20, -10], [50, -30]], 10, '#f4f0e6'); } else if (tipo === 1) { rr(g, -34, -20, 68, 40, 18); g.fillStyle = '#e8b25a'; g.fill(); } else { g.fillStyle = '#c9472f'; g.beginPath(); g.arc(0, 0, 26, 0, 7); g.fill(); seg(g, [[0, -26], [6, -40]], 4, '#3f8a4a'); } g.restore(); };
+
+registerShot('s042', { draw(g, t, info) { const cam = { z: 1.0 + 0.05 * ease.inOut(t / info.dur), x: 30 * t }; const { GY, M } = cozinha(g, t, cam, { mood: 'night', noite: true, aberta: ease.out(prog(t, 0.3, 1.0)) });
+  veil(g, '#0a0e20', 0.25); layer(g, cam, 1, (g) => drawFigure(g, { x: E.W / 2 + 330, y: GY, s: 1.5, facing: 1, outfit: VOCE, pose: breathe(POSES.reach, t), expr: 'thinking', rim: { color: '#fff4d0', dir: [1, -0.4], w: 6 } }));
+} });
+registerShot('s043', { draw(g, t, info) { UI.blueprint(g); const ui = S().ui; const v = 1 - ease.inOut(prog(t, 0.3, 1.9)); const x = E.W * 0.25, y = E.H * 0.42, w = E.W * 0.5, h = 160;
+  rr(g, x, y, w, h, 24); g.strokeStyle = ui.blueprint; g.lineWidth = 6; g.stroke(); rr(g, x + 14, y + 14, (w - 28) * v, h - 28, 14); g.fillStyle = v < 0.25 ? ui.accent : ui.good; g.fill(); rr(g, x + w, y + 50, 26, 60, 8); g.fillStyle = ui.blueprint; g.fill();
+  poly(g, [[E.W / 2 - 20, y - 160], [E.W / 2 - 70, y - 50], [E.W / 2 - 10, y - 60], [E.W / 2 - 40, y + 0], [E.W / 2 + 50, y - 110], [E.W / 2 - 5, y - 100], [E.W / 2 + 30, y - 160]], ui.gold);
+  big(g, 'ENERGIA:', Math.round(v * 100) + '%', E.W / 2, E.H * 0.78, 1, v < 0.25 ? ui.accent : ui.gold);
+} });
+registerShot('s044', { draw(g, t, info) { const cam = { z: 1.05 + 0.05 * ease.inOut(t / info.dur), x: -20 * t }; const { GY, M } = rua(g, t, cam, { mood: 'golden' });
+  layer(g, cam, 1, (g) => { const up = Math.abs(Math.sin(t * 2.4)); drawFigure(g, { x: E.W / 2, y: GY, s: 1.5, facing: 1, outfit: VOCE, pose: breathe(POSES.cheer, t), expr: 'determined', rim: { color: M.rim, dir: [1, -0.5] } }); carro(g, E.W / 2 + 10, GY - 330 - up * 80, 1.2, 0, '#3a6ea5');
+    for (let i = 0; i < 6; i++) { const k = ((t * 0.6 + i / 6) % 1); const x = E.W / 2 - 300 + i * 120, y = GY - 200 - k * 500; g.save(); g.globalAlpha = 1 - k; comida(g, x, y, i, 1.4); glow(g, x, y + 20, 60, '#ff8a3a', 0.6); poly(g, [[x - 20, y + 30], [x, y - 10 - 20 * Math.sin(t * 20 + i)], [x + 20, y + 30]], '#ff8a3a'); g.restore(); } });
+} });
+registerShot('s045', { draw(g, t, info) { const cam = { z: 1.05 + 0.04 * ease.inOut(t / info.dur), x: 0 }; const { GY, M } = cozinha(g, t, cam);
+  layer(g, cam, 1, (g) => { const top = GY - 190; rr(g, E.W / 2 - 300, top, 600, 22, 8); g.fillStyle = shade(M.dark, 0.1); g.fill(); for (const dx of [-260, 260]) seg(g, [[E.W / 2 + dx, top + 20], [E.W / 2 + dx, GY]], 12, shade(M.dark, 0.1));
+    const n = Math.min(14, Math.floor(t * 4)); for (let i = 0; i < n; i++) { rr(g, E.W / 2 - 160 + (i % 2) * 6, top - 14 - i * 16, 150, 14, 6); g.fillStyle = '#f2ece4'; g.fill(); } for (let i = 0; i < 3; i++) comida(g, E.W / 2 + 80 + i * 60, top - 30, i + Math.floor(t * 3), 1.2);
+    drawFigure(g, { x: E.W / 2 - 360, y: GY, s: 1.4, facing: 1, outfit: VOCE, pose: breathe(posesAt(t % 0.8, [[0, 'sit'], [0.4, { ...POSES.sit, eF: [24, -150], hF: [20, -200] }]]), t), expr: 'happy', rim: { color: M.rim, dir: [0, -1] }, shadow: false });
+    drawFigure(g, { x: E.W / 2 + 420, y: GY, s: 1.4, facing: -1, outfit: AMIGO, pose: breathe(POSES.handsOnHead, t, 1, 2), expr: 'shocked', rim: { color: M.rim, dir: [0, -1] } }); });
+  UI.badge(g, { str: 'PRATO Nº ' + Math.max(1, Math.min(14, Math.floor(t * 4))) });
+} });
+registerShot('s046', { draw(g, t, info) { const cam = { z: 1.3 + 0.04 * t, x: 450, y: -120 }; const { GY, M } = cozinha(g, t, cam, { aberta: 1, cheia: 0 });
+  layer(g, cam, 1, (g) => drawFigure(g, { x: E.W / 2 + 350, y: GY, s: 1.5, facing: 1, outfit: VOCE, pose: breathe(POSES.shrug, t), expr: 'sad', rim: { color: '#fff4d0', dir: [1, -0.4] } }));
+  UI.badge(g, { str: 'DIA 1: GELADEIRA VAZIA', a: ease.out(prog(t, 0.2, 0.5)) });
+} });
+registerShot('s047', { draw(g, t, info) { const cam = { z: 1.0 + 0.06 * ease.inOut(t / info.dur) }; const { GY, M } = mercado(g, t, cam, { estoque: 0.05 });
+  layer(g, cam, 1, (g) => { drawFigure(g, { x: E.W / 2, y: GY, s: 1.3, facing: 1, outfit: VOCE, pose: breathe(POSES.stand, t), expr: 'worried', rim: { color: '#e6f0ff', dir: [0, -1] } }); });
+  UI.badge(g, { str: 'SEMANA 1: MERCADO VAZIO', a: ease.out(prog(t, 0.2, 0.5)) }); FX.dust(g, t, { count: 30, color: '#e6f0ff', a: 0.3 });
+} });
+registerShot('s048', { draw(g, t, info) { blurLayer(g, 14, (g) => mercado(g, t, { z: 1.3 }, { estoque: 0.05 })); veil(g, '#0a0e18', 0.45);
+  bigFace(g, E.W / 2, E.H * 0.62, V(310, 330) * (1 + 0.03 * t), { outfit: VOCE, expr: 'cry', look: [-0.3, 0.4], rimColor: '#e6f0ff', rimSide: -1 });
+} });
+registerShot('s049', { draw(g, t, info) { UI.blueprint(g); const z = 1 + 0.05 * t; g.save(); g.translate(E.W / 2, E.H / 2); g.scale(z, z); g.translate(-E.W / 2, -E.H / 2);
+  UI.titleCard(g, t, { lines: ['MAS A CIÊNCIA', 'EXPLICA'], dur: info.dur, y: E.H * 0.48 }); g.restore();
+  for (let i = 0; i < 3; i++) { const a = t * 0.6 + i * 2.1; ring(g, E.W / 2 + Math.cos(a) * 520, E.H / 2 + Math.sin(a) * 260, 10, 3, S().ui.blueprint); }
+} });
+// escritório do Galileu (1638), à luz de vela
+const estudo = (g, t, cam) => sala(g, t, cam, { mood: 'interiorWarm', parede: '#5a3a2a', noite: true, janela: { x: 420, w: 300, h: 420 }, fundo: (g, GY, M) => {
+  for (let k = 0; k < 4; k++) { g.fillStyle = shade(M.dark, 0.1); g.fillRect(E.W / 2 - 860, GY - 200 - k * 150, 420, 14); for (let i = 0; i < 9; i++) { rr(g, E.W / 2 - 850 + i * 44, GY - 290 - k * 150, 34, 90, 3); g.fillStyle = ['#7a2a22', '#3a5a3a', '#6a4a2a', '#2a3a5a'][(i + k) % 4]; g.fill(); } }
+  seg(g, [[E.W / 2 + 120, GY], [E.W / 2 + 160, GY - 320]], 6, '#3a2a1e'); seg(g, [[E.W / 2 + 200, GY], [E.W / 2 + 160, GY - 320]], 6, '#3a2a1e'); seg(g, [[E.W / 2 + 60, GY - 300], [E.W / 2 + 280, GY - 400]], 22, '#8a6a3a'); } });
+registerShot('s050', { draw(g, t, info) { const cam = { z: 1.0 + 0.06 * ease.inOut(t / info.dur), x: -30 * t }; const { GY, M } = estudo(g, t, cam);
+  layer(g, cam, 1, (g) => { const top = GY - 200; rr(g, E.W / 2 - 520, top, 520, 24, 6); g.fillStyle = '#4a2e1e'; g.fill(); for (const dx of [-500, -20]) seg(g, [[E.W / 2 + dx, top + 20], [E.W / 2 + dx, GY]], 14, '#4a2e1e');
+    rr(g, E.W / 2 - 340, top - 16, 200, 16, 3); g.fillStyle = '#efe4c8'; g.fill(); const cx = E.W / 2 - 80; rr(g, cx - 10, top - 70, 20, 70, 4); g.fillStyle = '#f4ecd8'; g.fill(); poly(g, [[cx - 8, top - 72], [cx, top - 100 - 4 * Math.sin(t * 9)], [cx + 8, top - 72]], '#ffcf6a'); glow(g, cx, top - 90, 320, '#ffb850', 0.5 + 0.05 * Math.sin(t * 9));
+    drawFigure(g, { x: E.W / 2 - 300, y: GY, s: 1.5, facing: 1, outfit: GALILEU, pose: breathe(posesAt(t, [[0, 'think'], [1.6, 'pointUp']]), t), expr: t < 1.6 ? 'thinking' : 'surprised', rim: { color: '#ffc68a', dir: [1, -0.4], w: 5 } }); });
+  UI.badge(g, { str: '1638', a: ease.out(prog(t, 0.3, 0.6)), size: 60 }); FX.dust(g, t, { count: 50, color: '#ffd8a0', a: 0.4 });
+  if (t > 1.6) UI.callout(g, t, { at: [E.W / 2 - 300, E.H * 0.42], to: [E.W / 2 + 120, E.H * 0.2], str: 'GALILEU', start: 1.6, color: S().ui.gold });
+} });
+registerShot('s051', { draw(g, t, info) { UI.blueprint(g); const ui = S().ui, c = UI.bpStroke(); const x0 = E.W * 0.18, y0 = E.H * 0.84, w = E.W * 0.64, h = E.H * 0.62; seg(g, [[x0, y0 - h], [x0, y0], [x0 + w, y0]], 4, c);
+  text(g, 'TAMANHO →', x0 + w - 80, y0 + 44, { size: 32, color: ui.cream, font: FONTS.ui, weight: 900 }); const p = ease.inOut(prog(t, 0.4, 3.6));
+  const curva = (pow, cor, lbl, esc = 1) => { g.strokeStyle = cor; g.lineWidth = 8; g.lineCap = 'round'; g.beginPath(); for (let i = 0; i <= 100; i++) { const u = (i / 100) * p; const x = x0 + u * w, y = y0 - Math.pow(u, pow) * h * esc; i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); const yy = y0 - Math.pow(p, pow) * h * esc; glow(g, x0 + p * w, yy, 50, cor, 0.8); text(g, lbl, x0 + p * w + 20, yy - 30, { size: 46, color: cor, font: FONTS.ui, weight: 900, align: 'left' }); };
+  curva(2, ui.blueprint, 'FORÇA', 0.45); curva(3, ui.accent, 'PESO');
+} });
+registerShot('s052', { draw(g, t, info) { const cam = { z: 1.15 + 0.05 * ease.inOut(t / info.dur), x: 30 * t }; const { GY, M } = jardim(g, t, cam);
+  layer(g, cam, 1, (g) => formiga(g, E.W * 0.45 + t * 30, GY, 2.4, t, { andar: true, rim: M.rim, carga: (g, yb) => folha(g, -10, yb - 110, 1.4, -0.1) }));
+  UI.badge(g, { str: 'SUPER FORTE?', a: ease.out(prog(t, 0.4, 0.8)) });
+} });
+registerShot('s053', { draw(g, t, info) { const z = lerp(1.6, 1.0, ease.out(prog(t, 0, 1.0))); const cam = { z, x: 0 }; const { GY, M } = jardim(g, t, cam);
+  layer(g, cam, 1, (g) => { formiga(g, E.W * 0.5, GY, 0.35, t, { andar: true, rim: M.rim, carga: (g, yb) => folha(g, -10, yb - 110, 1.4, -0.1) });
+    g.save(); g.translate(E.W * 0.5 + 340, GY); rr(g, -260, -120, 420, 120, 50); g.fillStyle = '#1a1a22'; g.fill(); rr(g, -270, -20, 440, 30, 14); g.fillStyle = '#f4f0e6'; g.fill(); seg(g, [[-60, -120], [-80, -420]], 60, VOCE.color); g.restore(); });
+  UI.callout(g, t, { at: [E.W * 0.5, GY - 40], to: [E.W * 0.3, GY - 300], str: 'PEQUENA', start: 0.3, color: S().ui.gold });
+} });
+registerShot('s054', { draw(g, t, info) { UI.blueprint(g); const ui = S().ui; const rows = [{ label: 'TAMANHO', v: 0.08 }, { label: 'FORÇA PARA O TAMANHO', v: 0.95 }];
+  rows.forEach((r, i) => { const p = ease.out(prog(t, 0.3 + i * 0.6, 1.3 + i * 0.6)); const y = E.H * 0.5 + i * 160; text(g, r.label, E.W * 0.15, y - 50, { size: 40, color: ui.cream, font: FONTS.ui, weight: 900, align: 'left' }); rr(g, E.W * 0.15, y - 20, E.W * 0.7, 60, 12); g.fillStyle = alpha(ui.blueprint, 0.12); g.fill(); rr(g, E.W * 0.15, y - 20, E.W * 0.7 * r.v * p, 60, 12); g.fillStyle = i ? ui.gold : ui.blueprint; g.fill(); });
+  formiga(g, E.W * 0.5, E.H * 0.32, 0.9, t, { cor: ui.blueprint, rim: ui.blueprint });
+} });
+registerShot('s055', { draw(g, t, info) { const cam = { z: 1.05 + 0.05 * ease.inOut(t / info.dur), x: -20 * t }; const { GY, M } = rua(g, t, cam, { mood: 'golden' });
+  layer(g, cam, 1, (g) => { const tr = Math.sin(t * 14) * 4 * prog(t, 1.2, 2); folha(g, E.W / 2 + 260, GY - 70 + tr * 0.5, 3.4, 0.05); formiga(g, E.W / 2 + 230, GY, 3.2, t, { rim: M.rim, facing: 1 });
+    drawFigure(g, { x: E.W / 2 - 600, y: GY, s: 1.5, facing: 1, outfit: VOCE, pose: breathe(POSES.crossArms, t), expr: 'smirk', rim: { color: M.rim, dir: [1, -0.5] } }); });
+  UI.badge(g, { str: 'FORMIGA DO SEU TAMANHO', a: ease.out(prog(t, 0.3, 0.7)) });
+} });
+registerShot('s056', { draw(g, t, info) { const cam = { z: 1.1 + 0.04 * ease.inOut(t / info.dur), x: 0 }; const { GY, M } = rua(g, t, cam, { mood: 'golden' });
+  layer(g, cam, 1, (g) => { const k = ease.in(prog(t, 0.2, 0.9)); folha(g, E.W / 2 + 260, GY - 70, 3.4, 0.05); const [sx] = t > 0.9 ? shake(t, 8 * (1 - prog(t, 0.9, 1.4))) : [0];
+    formiga(g, E.W / 2 + 230 + sx, GY, 3.2, t, { rim: M.rim, pernas: lerp(1, 0.25, k) });
+    drawFigure(g, { x: E.W / 2 - 600, y: GY, s: 1.5, facing: 1, outfit: VOCE, pose: breathe(posesAt(t, [[0, 'crossArms'], [1.0, 'shrug']]), t), expr: t < 1.0 ? 'surprised' : 'smirk', rim: { color: M.rim, dir: [1, -0.5] } }); });
+  FX.dust(g, t, { count: 60, color: '#d8b890', a: 0.4 * prog(t, 0.8, 1.2), area: [E.W * 0.4, E.H * 0.6, E.W * 0.4, E.H * 0.3] });
+} });
+const icone = (g, x, y, k, lbl, cor) => { if (k <= 0) return; const s = ease.outBack(clamp(k)); g.save(); g.translate(x, y); g.scale(s, s); circle(g, 0, 0, 130, alpha(cor, 0.12)); ring(g, 0, 0, 130, 5, cor); text(g, lbl, 0, 190, { size: 46, color: cor, font: FONTS.ui, weight: 900 }); g.restore(); };
+registerShot('s057', { draw(g, t, info) { UI.blueprint(g); const ui = S().ui; const y = E.H * 0.45;
+  icone(g, E.W * 0.25, y, prog(t, 0.5, 0.9), 'MÚSCULOS', ui.gold); icone(g, E.W * 0.5, y, prog(t, 1.3, 1.7), 'OSSOS', ui.blueprint); icone(g, E.W * 0.75, y, prog(t, 2.1, 2.5), 'TENDÕES', ui.good);
+  if (t > 0.5) { g.save(); g.translate(E.W * 0.25, y); g.fillStyle = alpha(ui.gold, 0.6); g.beginPath(); g.ellipse(0, 0, 50, 80, 0, 0, 7); g.fill(); g.restore(); } if (t > 1.3) { seg(g, [[E.W * 0.5, y - 70], [E.W * 0.5, y + 70]], 30, ui.blueprint); circle(g, E.W * 0.5, y - 76, 22, ui.blueprint); circle(g, E.W * 0.5, y + 76, 22, ui.blueprint); } if (t > 2.1) seg(g, [[E.W * 0.75 - 50, y - 60], [E.W * 0.75 + 50, y + 60]], 12, ui.good);
+} });
+registerShot('s058', { draw(g, t, info) { UI.blueprint(g); const ui = S().ui; const ang = 0.35 * Math.cos(t * 3) * Math.exp(-t * 1.2); const cx = E.W / 2, cy = E.H * 0.42;
+  poly(g, [[cx - 60, E.H * 0.82], [cx + 60, E.H * 0.82], [cx + 10, cy], [cx - 10, cy]], ui.blueprint); g.save(); g.translate(cx, cy); g.rotate(ang); seg(g, [[-420, 0], [420, 0]], 12, ui.blueprint);
+  for (const sx of [-1, 1]) { seg(g, [[sx * 400, 0], [sx * 400, 160]], 3, ui.blueprint); g.strokeStyle = ui.gold; g.lineWidth = 6; g.beginPath(); g.arc(sx * 400, 160, 90, 0, Math.PI); g.stroke(); } g.restore();
+  UI.bigLine(g, t - 0.4, { str: 'EQUILÍBRIO', dur: info.dur - 0.4, y: E.H * 0.16, size: 96 });
+} });
+registerShot('s059', { kind: '3d',
+  init(T) { const M = mood('golden'); const st = T.stage({ mood: 'golden', fov: 36, fog: [12, 70], keyPos: [-10, 8, 6], keyIntensity: 2.6, ambient: 1.2 });
+    st.add(T.ground(120, 120, M.road, T.tiles(M.road, 20, [20, 20])));
+    let s = 5; for (let i = -6; i <= 6; i++) { const b = T.building(6, 8 + ((i + 20) % 4) * 3, 6, { color: ['#5a3a34', '#4a3646', '#6b4a3a'][(i + 9) % 3], win: M.practical, lit: 0.25, seed: s++ }); b.position.set(i * 7, 0, -8); st.add(b); }
+    for (let i = -6; i <= 6; i++) st.add(T.tree3D(i * 7 + 3, -3, 1.0, '#2a3a2a'));
+    const voce = T.figure3D(VOCE, { rim: M.rim, pose: POSES.stand }); st.add(voce); const amigo = T.figure3D(AMIGO, { rim: M.rim, pose: POSES.stand }); amigo.position.set(-1.2, 0, 0.3); st.add(amigo);
+    return { stage: st, voce, amigo }; },
+  draw(s, t, info, T) { const ph = t * 6.28 * 0.9; s.voce.setPose(walkPose(ph)); s.amigo.setPose(walkPose(ph + 1)); s.voce.position.x = t * 0.9; s.amigo.position.x = -1.2 + t * 0.9;
+    T.dolly(s.stage.camera, t, [[0, { pos: [-3, 1.6, 6], look: [0, 1.1, 0] }], [info.dur, { pos: [5, 2.0, 5.5], look: [4, 1.1, 0] }]]); },
+  overlay(g, t) { FX.dust(g, t, { count: 30, color: '#ffe8c0', a: 0.3 }); } });
+registerShot('s060', { draw(g, t, info) { const cam = { z: 1.05 + 0.05 * ease.inOut(t / info.dur), x: 20 * t }; const { GY, M } = telhado(g, t, cam, { mood: 'dusk' });
+  layer(g, cam, 1, (g) => { const x = E.W / 2 + 120, fall = ease.in(prog(t, 1.2, 2.6)); if (fall < 1) { g.save(); g.translate(0, fall * 400); g.globalAlpha = 1 - fall; capa(g, x - fall * 200, GY - fall * 100, 1.6, t, '#c9472f', 1 - fall * 0.6); g.restore(); }
+    drawFigure(g, { x, y: GY, s: 1.6, facing: 1, outfit: VOCE, pose: breathe(posesAt(t, [[0, 'stand'], [1.4, 'sad']]), t), expr: t < 1.2 ? 'smile' : 'sad', rim: { color: M.rim, dir: [-1, -0.4] } }); });
+  FX.dust(g, t, { count: 40, color: '#ffd8b0', a: 0.3 });
+} });
+registerShot('s061', { draw(g, t, info) { const cam = { z: 1.15 + 0.04 * ease.inOut(t / info.dur), x: 0 }; const { GY, M } = rua(g, t, cam, { mood: 'dusk' });
+  layer(g, cam, 1, (g) => { const back = ease.out(prog(t, 1.0, 1.6));
+    drawFigure(g, { x: E.W / 2 + 240, y: GY, s: 1.6, facing: -1, outfit: AMIGO, pose: breathe(posesAt(t, [[0, 'stand'], [0.4, { ...POSES.cheer, eF: [40, -170], hF: [70, -160], eB: [-10, -170], hB: [40, -160] }]]), t, 1, 2), expr: 'happy', rim: { color: M.rim, dir: [-1, -0.4] } });
+    drawFigure(g, { x: E.W / 2 - 200 - 140 * back, y: GY, s: 1.6, facing: 1, outfit: VOCE, pose: breathe(posesAt(t, [[0, 'stand'], [1.0, 'shrug']]), t), expr: t < 1.0 ? 'smile' : 'scared', rim: { color: M.rim, dir: [-1, -0.4] } }); });
+  if (t > 1.2) UI.callout(g, t, { at: [E.W / 2 - 300, E.H * 0.45], to: [E.W / 2 - 600, E.H * 0.2], str: 'CUIDADO!', start: 1.2, color: S().ui.accent });
+} });
+registerShot('s062', { draw(g, t, info) { const cam = { z: 1.0 + 0.04 * ease.inOut(t / info.dur), x: 120 * t }; const { GY, M } = rua(g, t, cam, { mood: 'night', seed: 7 });
+  layer(g, cam, 1, (g) => drawFigure(g, { x: E.W / 2 - 300 + 120 * t, y: GY, s: 1.3, facing: 1, outfit: VOCE, pose: walkPose(t * 6.28 * 0.8), expr: 'sleepy', rim: { color: M.rim, dir: [1, -0.6] } }));
+  FX.stars(g, t, { count: 60 });
+} });
+registerShot('s063', { draw(g, t, info) { blurLayer(g, 12, (g) => quarto(g, t, { z: 1.5, x: 400, y: -120 }, { mood: 'night', noite: true })); veil(g, '#0a0e20', 0.45); const M = mood('night');
+  rr(g, E.W * 0.15, E.H * 0.74, E.W * 0.7, 60, 10); g.fillStyle = shade(M.dark, 0.3); g.fill(); despertador(g, E.W / 2, E.H * 0.74, 3.2 * (1 + 0.03 * t), 1, 0); glow(g, E.W / 2, E.H * 0.7, 400, '#9fb8ff', 0.15);
+} });
+registerShot('s064', { draw(g, t, info) { blurLayer(g, 14, (g) => quarto(g, t, { z: 1.4, x: -250, y: -80 }, { mood: 'night', noite: true })); veil(g, '#0a0e20', 0.4); const M = mood('night');
+  bigFace(g, E.W / 2, E.H * 0.62, V(300, 330) * (1 + 0.03 * t), { outfit: VOCE, expr: 'thinking', rimColor: M.rim, rimSide: -1, blink: (t % 3.1) > 3.0 });
+} });
+registerShot('s065', { draw(g, t, info) { blurLayer(g, 14, (g) => quarto(g, t, { z: 1.6, x: 100, y: -150 }, { mood: 'night', noite: true })); veil(g, '#0a0e20', 0.35); const M = mood('night');
+  const k = ease.inOut(prog(t, 0.2, 1.6)); const bx = E.W / 2 - 40, by = lerp(E.H * 0.3, E.H * 0.48, k); bolha(g, bx, by, 110 + 4 * Math.sin(t * 3), t); mao(g, bx + 40, by + 150, 1.3, false, VOCE.color, M.rim);
+  if (t > 1.6) FX.sparkle(g, bx - 60, by - 70, 30, '#ffffff', 0.8 * Math.abs(Math.sin(t * 4)));
+} });
+registerShot('s066', { draw(g, t, info) { blurLayer(g, 14, (g) => quarto(g, t, { z: 1.4, x: -150, y: -80 }, { mood: 'night', noite: true })); veil(g, '#0a0e20', 0.4); const M = mood('night');
+  bigFace(g, E.W / 2, E.H * 0.62, V(300, 330) * (1 + 0.03 * t), { outfit: VOCE, expr: 'smile', look: [0, 0], rimColor: M.rim, rimSide: -1 });
+} });
+function telaFinal(g, t, inscreva) { const ui = S().ui; g.fillStyle = linGrad(g, 0, 0, 0, E.H, ['#0e1a14', '#14281e', '#1e3a24']); g.fillRect(-E.W, -E.H, E.W * 3, E.H * 3); glow(g, E.W / 2, E.H * 0.9, E.W * 0.45, S().ui.good, 0.2);
+  const a1 = ease.out(prog(t, 0.2, 0.8)); text(g, 'O que VOCÊ faria primeiro', E.W / 2, 150, { size: 70, font: FONTS.serif, weight: 900, italic: true, color: ui.cream, alpha: a1, glow: 18, glowColor: 'rgba(200,255,170,.4)' }); text(g, 'com 50x mais força?', E.W / 2, 240, { size: 70, font: FONTS.serif, weight: 900, italic: true, color: ui.gold, alpha: a1, glow: 18, glowColor: 'rgba(255,220,120,.5)' });
+  UI.bubble(g, E.W / 2 - 280, 400, { w: 130, h: 70 }); text(g, 'COMENTE', E.W / 2 - 280, 470, { size: 30, color: ui.cream, font: FONTS.ui, weight: 900, alpha: a1 });
+  const sp = ease.outBack(prog(t, inscreva ? 0.2 : 0.6, inscreva ? 0.7 : 1.1)) * (inscreva ? 1.15 + 0.05 * Math.sin(t * 6) : 1); g.save(); g.translate(E.W / 2 + 80, 400); g.scale(sp, sp); rr(g, -170, -40, 340, 80, 40); g.fillStyle = '#e0302a'; g.fill(); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(-124, 14); g.lineTo(-124, -16); g.lineTo(-98, 0); g.closePath(); g.fill(); text(g, 'Inscreva-se', 18, 2, { size: 36, color: '#fff', font: FONTS.ui, weight: 900 }); g.restore();
+  const cast = [AMIGO, VOCE, DOC], n = cast.length, y0 = E.H - 170; cast.forEach((of, i) => { const k = ease.out(prog(t, 0.3 + i * 0.1, 0.7 + i * 0.1)); drawFigure(g, { x: E.W / 2 + (i - 1) * 220, y: y0 + (1 - k) * 40, s: i === 1 ? 1.25 : 1.0, facing: 1, outfit: of, pose: i === 1 ? breathe(POSES.wave, t) : breathe(POSES.relaxed, t, 1, i), expr: 'smile', alpha: k, rim: { color: '#c6ff3d', dir: [0, -1] } }); }); }
+registerShot('s067', { draw(g, t) { telaFinal(g, t, false); } });
+registerShot('s068', { draw(g, t) { telaFinal(g, t + 2, true); } });

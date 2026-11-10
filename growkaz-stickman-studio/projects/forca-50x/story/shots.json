@@ -1,0 +1,1608 @@
+{
+ "title": "E se você fosse 50 vezes mais forte",
+ "duration": 218.6,
+ "shots": [
+  {
+   "id": "s001",
+   "start": 0,
+   "end": 1.8,
+   "line": "",
+   "scene": "wide: você na cama, despertador tocando",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "phonering",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s002",
+   "start": 1.8,
+   "end": 4.9,
+   "line": "",
+   "scene": "insert: mão bate no despertador e ele vira pó",
+   "set": "quarto",
+   "bars": "scope",
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.45,
+     "name": "impact",
+     "gain": -6
+    },
+    {
+     "at": 0.5,
+     "name": "glitch",
+     "gain": -14
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s003",
+   "start": 4.9,
+   "end": 8.25,
+   "line": "",
+   "scene": "bigFace: você olhando as mãos, chocado",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "shimmer",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s004",
+   "start": 8.25,
+   "end": 12.45,
+   "line": "",
+   "scene": "você de pé no quarto, brilho de poder, 50x MAIS FORTE",
+   "set": "quarto",
+   "bars": "scope",
+   "in": {
+    "type": "flash",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0,
+     "name": "powerup",
+     "gain": -6
+    },
+    {
+     "at": 0.4,
+     "name": "stinger",
+     "gain": -8
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s005",
+   "start": 12.45,
+   "end": 16.9,
+   "line": "",
+   "scene": "macro: formiga carregando folha enorme, ATÉ 50x O PESO",
+   "set": "jardim",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s006",
+   "start": 16.9,
+   "end": 19.75,
+   "line": "",
+   "scene": "você levanta um carro acima da cabeça, igual a formiga",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "impact",
+     "gain": -10
+    },
+    {
+     "at": 0.9,
+     "name": "cheer",
+     "gain": -16
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s007",
+   "start": 19.75,
+   "end": 21.7,
+   "line": "",
+   "scene": "você posando de herói com capa no telhado",
+   "set": "telhado",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "whoosh",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s008",
+   "start": 21.7,
+   "end": 24.0,
+   "line": "",
+   "scene": "bigFace: sorriso vira preocupação",
+   "set": "telhado",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s009",
+   "start": 24.0,
+   "end": 26.6,
+   "line": "",
+   "scene": "cinema: tela com herói voando, você na plateia",
+   "set": "cinema",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "murmur",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s010",
+   "start": 26.6,
+   "end": 27.9,
+   "line": "",
+   "scene": "banheiro wide: você entra, MINUTO 1",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "dip",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "tick",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s011",
+   "start": 27.9,
+   "end": 29.15,
+   "line": "",
+   "scene": "você no espelho com a escova",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s012",
+   "start": 29.15,
+   "end": 31.05,
+   "line": "",
+   "scene": "insert: escova quebra ao meio",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.35,
+     "name": "hit",
+     "gain": -8
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s013",
+   "start": 31.05,
+   "end": 32.9,
+   "line": "",
+   "scene": "insert: torneira arrancada, jato de água",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "hit",
+     "gain": -8
+    },
+    {
+     "at": 0.4,
+     "name": "rain",
+     "gain": -14,
+     "dur": 1.4
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s014",
+   "start": 32.9,
+   "end": 35.2,
+   "line": "",
+   "scene": "insert: maçaneta entorta, porta racha",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "impact",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s015",
+   "start": 35.2,
+   "end": 38.55,
+   "line": "",
+   "scene": "planta: aperto de mão normal 50 KG",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "zoom",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "counter",
+     "gain": -16
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s016",
+   "start": 38.55,
+   "end": 42.2,
+   "line": "",
+   "scene": "planta: o seu aperto 2.400 KG, aparelho explode",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "riser",
+     "gain": -12
+    },
+    {
+     "at": 1.6,
+     "name": "impact",
+     "gain": -6
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s017",
+   "start": 42.2,
+   "end": 45.0,
+   "line": "",
+   "scene": "cozinha wide: café da manhã, amigo na mesa",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s018",
+   "start": 45.0,
+   "end": 48.5,
+   "line": "",
+   "scene": "REGRA Nº 1: TUDO É DE VIDRO",
+   "set": "cozinha",
+   "bars": "scope",
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "stinger",
+     "gain": -10
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s019",
+   "start": 48.5,
+   "end": 49.9,
+   "line": "",
+   "scene": "insert: copo estoura na mão",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.35,
+     "name": "glitch",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s020",
+   "start": 49.9,
+   "end": 50.9,
+   "line": "",
+   "scene": "insert: celular racha na mão",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "hit",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s021",
+   "start": 50.9,
+   "end": 52.8,
+   "line": "",
+   "scene": "amigo estende a mão, você recua com medo",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s022",
+   "start": 52.8,
+   "end": 55.75,
+   "line": "",
+   "scene": "bigFace: você determinado, olhando para baixo",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "riser",
+     "gain": -14
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s023",
+   "start": 55.75,
+   "end": 58.4,
+   "line": "",
+   "scene": "close das pernas brilhando na calçada",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "shimmer",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s024",
+   "start": 58.4,
+   "end": 61.65,
+   "line": "",
+   "scene": "rua wide: você agacha para pular",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s025",
+   "start": 61.65,
+   "end": 63.9,
+   "line": "",
+   "scene": "você dispara para o céu, anel de poeira",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "whoosh",
+     "gain": -6
+    },
+    {
+     "at": 0.25,
+     "name": "kick",
+     "gain": -8
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s026",
+   "start": 63.9,
+   "end": 67.8,
+   "line": "",
+   "scene": "planta: pulo normal 40 CM",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "zoom",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s027",
+   "start": 67.8,
+   "end": 72.5,
+   "line": "",
+   "scene": "planta: prédio de 10 andares, o seu pulo",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "counter",
+     "gain": -14
+    },
+    {
+     "at": 3.0,
+     "name": "ding",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s028",
+   "start": 72.5,
+   "end": 77.6,
+   "line": "",
+   "scene": "3D: você parado no ar sobre o bairro, câmera gira",
+   "set": "3d",
+   "bars": "scope",
+   "in": {
+    "type": "flash",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0,
+     "name": "freeze",
+     "gain": -6
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s029",
+   "start": 77.6,
+   "end": 80.4,
+   "line": "",
+   "scene": "wide: você no alto vendo o bairro",
+   "set": "ceu",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s030",
+   "start": 80.4,
+   "end": 82.95,
+   "line": "",
+   "scene": "bigFace: alegria vira medo",
+   "set": "ceu",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.8,
+     "name": "slowmo",
+     "gain": -10
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s031",
+   "start": 82.95,
+   "end": 84.3,
+   "line": "",
+   "scene": "queda com linhas de velocidade",
+   "set": "ceu",
+   "bars": null,
+   "in": {
+    "type": "whip",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0,
+     "name": "whoosh",
+     "gain": -4
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -14
+   }
+  },
+  {
+   "id": "s032",
+   "start": 84.3,
+   "end": 89.3,
+   "line": "",
+   "scene": "queda + velocímetro até 100 KM/H, impacto no fim",
+   "set": "ceu",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "counter",
+     "gain": -14
+    },
+    {
+     "at": 4.4,
+     "name": "impact",
+     "gain": -3
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -14
+   }
+  },
+  {
+   "id": "s033",
+   "start": 89.3,
+   "end": 92.7,
+   "line": "",
+   "scene": "você numa cratera, poeira baixando",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "thunder",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s034",
+   "start": 92.7,
+   "end": 94.95,
+   "line": "",
+   "scene": "laboratório wide: cientista e raio-x",
+   "set": "lab",
+   "bars": null,
+   "in": {
+    "type": "dip",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s035",
+   "start": 94.95,
+   "end": 97.25,
+   "line": "",
+   "scene": "planta: músculo gigante, osso e tendão normais",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s036",
+   "start": 97.25,
+   "end": 101.3,
+   "line": "",
+   "scene": "planta: TENDÃO DE AQUILES",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "blip",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s037",
+   "start": 101.3,
+   "end": 104.95,
+   "line": "",
+   "scene": "planta: correndo = 12x O PESO",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "counter",
+     "gain": -14
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s038",
+   "start": 104.95,
+   "end": 110.9,
+   "line": "",
+   "scene": "planta: medidor vai a 50x, tendão no vermelho",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "riser",
+     "gain": -10
+    },
+    {
+     "at": 3.5,
+     "name": "heartbeat",
+     "gain": -12
+    },
+    {
+     "at": 4.5,
+     "name": "glitch",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s039",
+   "start": 110.9,
+   "end": 113.7,
+   "line": "",
+   "scene": "você diante do espelho, luz fria",
+   "set": "banheiro",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s040",
+   "start": 113.7,
+   "end": 115.1,
+   "line": "",
+   "scene": "bigFace: você mesmo é o inimigo",
+   "set": "banheiro",
+   "bars": "scope",
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.05,
+     "name": "stinger",
+     "gain": -6
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s041",
+   "start": 115.1,
+   "end": 118.6,
+   "line": "",
+   "scene": "raio-x com ossos rachando, cientista aponta",
+   "set": "lab",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 1.0,
+     "name": "glitch",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s042",
+   "start": 118.6,
+   "end": 121.3,
+   "line": "",
+   "scene": "noite: geladeira aberta brilhando",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "dip",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s043",
+   "start": 121.3,
+   "end": 123.4,
+   "line": "",
+   "scene": "planta: barra de energia esvaziando",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "powerup",
+     "gain": -14,
+     "pitch": 0.6
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s044",
+   "start": 123.4,
+   "end": 126.1,
+   "line": "",
+   "scene": "você levanta carro, comida queimando em chamas",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.4,
+     "name": "impact",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s045",
+   "start": 126.1,
+   "end": 130.8,
+   "line": "",
+   "scene": "você comendo pilha de pratos, amigo espantado",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 1.0,
+     "name": "pop",
+     "gain": -14
+    },
+    {
+     "at": 2.0,
+     "name": "pop",
+     "gain": -14
+    },
+    {
+     "at": 3.0,
+     "name": "pop",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s046",
+   "start": 130.8,
+   "end": 132.6,
+   "line": "",
+   "scene": "geladeira vazia, DIA 1",
+   "set": "cozinha",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "blip",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s047",
+   "start": 132.6,
+   "end": 135.0,
+   "line": "",
+   "scene": "mercado vazio, SEMANA 1",
+   "set": "mercado",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "blip",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s048",
+   "start": 135.0,
+   "end": 137.1,
+   "line": "",
+   "scene": "bigFace: você triste",
+   "set": "mercado",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "hum",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s049",
+   "start": 137.1,
+   "end": 140.9,
+   "line": "",
+   "scene": "A CIÊNCIA EXPLICA",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "zoom",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "shimmer",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s050",
+   "start": 140.9,
+   "end": 145.9,
+   "line": "",
+   "scene": "escritório de Galileu à luz de vela, 1638",
+   "set": "galileu",
+   "bars": null,
+   "in": {
+    "type": "dip",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "ding",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s051",
+   "start": 145.9,
+   "end": 151.4,
+   "line": "",
+   "scene": "gráfico: PESO cresce mais rápido que FORÇA",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "counter",
+     "gain": -16
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s052",
+   "start": 151.4,
+   "end": 154.7,
+   "line": "",
+   "scene": "formiga com folha de novo",
+   "set": "jardim",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s053",
+   "start": 154.7,
+   "end": 155.9,
+   "line": "",
+   "scene": "câmera abre: formiga minúscula ao lado do seu tênis",
+   "set": "jardim",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "swish",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s054",
+   "start": 155.9,
+   "end": 159.75,
+   "line": "",
+   "scene": "planta: força grande para o tamanho",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.4,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s055",
+   "start": 159.75,
+   "end": 165.1,
+   "line": "",
+   "scene": "formiga gigante do seu tamanho não ergue a folha",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 1.5,
+     "name": "hit",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s056",
+   "start": 165.1,
+   "end": 168.0,
+   "line": "",
+   "scene": "as pernas da formiga cedem, você encolhe os ombros",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "impact",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s057",
+   "start": 168.0,
+   "end": 173.2,
+   "line": "",
+   "scene": "planta: MÚSCULO · OSSO · TENDÃO",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 1.4,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 2.2,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s058",
+   "start": 173.2,
+   "end": 175.55,
+   "line": "",
+   "scene": "balança equilibrada: EQUILÍBRIO",
+   "set": "blueprint",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.4,
+     "name": "ding",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s059",
+   "start": 175.55,
+   "end": 180.3,
+   "line": "",
+   "scene": "3D: você caminhando no bairro ao entardecer",
+   "set": "3d",
+   "bars": null,
+   "in": {
+    "type": "fade",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s060",
+   "start": 180.3,
+   "end": 184.7,
+   "line": "",
+   "scene": "telhado ao entardecer: a capa cai, você sem graça",
+   "set": "telhado",
+   "bars": "scope",
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 1.2,
+     "name": "swish",
+     "gain": -12
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "wind",
+    "gain": -22
+   }
+  },
+  {
+   "id": "s061",
+   "start": 184.7,
+   "end": 189.15,
+   "line": "",
+   "scene": "amigo abre os braços, você recua com medo de abraçar",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s062",
+   "start": 189.15,
+   "end": 192.7,
+   "line": "",
+   "scene": "noite: você voltando para casa",
+   "set": "rua",
+   "bars": null,
+   "in": {
+    "type": "dip",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "footstep",
+     "gain": -14
+    },
+    {
+     "at": 0.9,
+     "name": "footstep",
+     "gain": -14
+    },
+    {
+     "at": 1.5,
+     "name": "footstep",
+     "gain": -14
+    }
+   ],
+   "notes": "",
+   "amb": {
+    "name": "city",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s063",
+   "start": 192.7,
+   "end": 194.7,
+   "line": "",
+   "scene": "insert: o pozinho do despertador na mesinha",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -24
+   }
+  },
+  {
+   "id": "s064",
+   "start": 194.7,
+   "end": 198.4,
+   "line": "",
+   "scene": "bigFace: você pensando, luz da lua",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": "",
+   "amb": {
+    "name": "roomtone",
+    "gain": -26
+   }
+  },
+  {
+   "id": "s065",
+   "start": 198.4,
+   "end": 201.55,
+   "line": "",
+   "scene": "insert: sua mão segura uma bolha de sabão sem estourar",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 1.4,
+     "name": "shimmer",
+     "gain": -10
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s066",
+   "start": 201.55,
+   "end": 203.8,
+   "line": "",
+   "scene": "bigFace: você olha para a câmera e sorri",
+   "set": "quarto",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [],
+   "notes": ""
+  },
+  {
+   "id": "s067",
+   "start": 203.8,
+   "end": 212.25,
+   "line": "",
+   "scene": "tela final: pergunta e elenco",
+   "set": "fim",
+   "bars": null,
+   "in": {
+    "type": "fade",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "id": "s068",
+   "start": 212.25,
+   "end": 218.6,
+   "line": "",
+   "scene": "tela final: inscreva-se",
+   "set": "fim",
+   "bars": null,
+   "in": {
+    "type": "cut",
+    "dur": 0.4
+   },
+   "sfx": [
+    {
+     "at": 0.5,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "notes": ""
+  }
+ ],
+ "music": [
+  {
+   "start": 0,
+   "end": 26.6,
+   "mood": "mystery",
+   "intensity": 0.45
+  },
+  {
+   "start": 26.6,
+   "end": 58.4,
+   "mood": "playful",
+   "intensity": 0.5
+  },
+  {
+   "start": 58.4,
+   "end": 92.7,
+   "mood": "action",
+   "intensity": 0.7
+  },
+  {
+   "start": 92.7,
+   "end": 137.1,
+   "mood": "tension",
+   "intensity": 0.6
+  },
+  {
+   "start": 137.1,
+   "end": 180.3,
+   "mood": "wonder",
+   "intensity": 0.55
+  },
+  {
+   "start": 180.3,
+   "end": 218.6,
+   "mood": "hopeful",
+   "intensity": 0.5
+  }
+ ]
+}
