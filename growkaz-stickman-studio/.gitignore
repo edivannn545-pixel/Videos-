@@ -1,0 +1,4 @@
+node_modules/
+projects/*/build/
+__pycache__/
+examples/*/build/
