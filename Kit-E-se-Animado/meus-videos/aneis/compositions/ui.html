@@ -1,0 +1,31 @@
+<template>
+<style>
+@font-face{font-family:'Fraunces';src:url('assets/fonts/fraunces-black.ttf');font-weight:900}
+#root{position:absolute;inset:0}
+.capg{position:absolute;left:90px;width:900px;top:1190px;height:120px;display:flex;align-items:center;justify-content:center;gap:0 16px;flex-wrap:wrap;text-align:center;font:800 62px/1.05 Inter;letter-spacing:-.01em;text-shadow:0 3px 0 #0009,0 0 18px #000b,0 6px 26px #0007}
+.capg span{display:inline-block}
+.pq{position:absolute;left:0;width:1080px;text-align:center}
+.pqi{display:inline-block;background:#0d1322EE;border:2px solid #EABA4266;border-radius:18px;padding:16px 44px 14px}
+.pqn{font:900 112px Fraunces;color:#EABA42;text-shadow:0 0 22px #EABA4288;line-height:1.05}
+.pql{font:600 30px 'IBM Plex Mono';letter-spacing:.14em;color:#d9d4c6;margin-top:4px}
+.tag{position:absolute;left:70px;font:900 50px Fraunces;color:#F2E2BE;background:#3a2b1eE8;border:3px solid #E8C87E88;border-radius:10px;padding:6px 22px}
+.pill{position:absolute;left:0;width:1080px;text-align:center}
+.pill span{display:inline-block;background:#10162bE8;color:#EEF1F6;font:600 30px 'IBM Plex Mono';letter-spacing:.09em;padding:13px 34px;border-radius:40px;border:2px solid #EABA4288}
+</style>
+<div id="root" data-composition-id="ui" data-width="1080" data-height="1920" data-layout-allow-overlap>
+<div id="el0" class="clip tag" data-start="5.6" data-duration="3.700" style="top:230px">BRASIL</div>
+<div id="el1" class="clip pill" data-start="17.3" data-duration="4.400" style="top:224px"><span>INVERNO</span></div>
+<div id="el2" class="clip tag" data-start="43.8" data-duration="3.000" style="top:230px">466 MILHÕES DE ANOS ATRÁS</div>
+<div id="el3" class="clip pq" data-start="48.7" data-duration="6.700" style="top:216px"><div class="pqi"><div id="el3_n" class="pqn">0</div><div class="pql">CRATERAS PERTO DO EQUADOR</div></div></div>
+</div>
+<script>
+const tl=gsap.timeline({paused:true});
+tl.set({},{},67.1);
+tl.fromTo("#el0",{opacity:0},{opacity:1,duration:.2},5.6);
+tl.fromTo("#el1",{opacity:0},{opacity:1,duration:.3,ease:"none"},17.38);
+tl.fromTo("#el2",{opacity:0},{opacity:1,duration:.2},43.8);
+tl.fromTo("#el3 .pqi",{opacity:0,scale:.92},{opacity:1,scale:1,duration:.16,ease:"power3.out"},48.7);
+(function(){var o={v:0},el=document.querySelector("#el3_n");tl.fromTo(o,{v:0},{v:21,duration:1.2,ease:"power2.out",onUpdate:function(){if(el)el.textContent=String(Math.round(o.v)).replace(/\B(?=(\d{3})+(?!\d))/g,".")+"";}},48.75);})();
+window.__timelines["ui"]=tl;
+</script>
+</template>

@@ -1,0 +1,36 @@
+{
+  "duracao": 67.1,
+  "palavrasPorLegenda": 3,
+  "destaques": [],
+  "trocas": {},
+  "elementos": [
+    {
+      "tipo": "etiqueta",
+      "texto": "BRASIL",
+      "inicio": 5.6,
+      "fim": 9.3
+    },
+    {
+      "tipo": "pill",
+      "texto": "INVERNO",
+      "inicio": 17.3,
+      "fim": 21.7
+    },
+    {
+      "tipo": "etiqueta",
+      "texto": "466 MILHÕES DE ANOS ATRÁS",
+      "inicio": 43.8,
+      "fim": 46.8
+    },
+    {
+      "tipo": "contador",
+      "de": 0,
+      "ate": 21,
+      "rotulo": "CRATERAS PERTO DO EQUADOR",
+      "inicio": 48.7,
+      "fim": 55.4,
+      "duracaoConta": 1.2
+    }
+  ],
+  "semLegenda": true
+}
