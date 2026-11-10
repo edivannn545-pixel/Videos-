@@ -1,0 +1,589 @@
+{
+ "title": "E se você tivesse o dom de curar",
+ "duration": 49.7,
+ "shots": [
+  {
+   "id": "c01",
+   "start": 0,
+   "end": 1.0,
+   "line": "",
+   "scene": "wide: avô na cama, você entra; push",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "hum",
+     "gain": -20,
+     "dur": 1
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c02",
+   "start": 1.0,
+   "end": 2.0,
+   "line": "",
+   "scene": "insert: as mãos se seguram",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "swish",
+     "gain": -14
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c03",
+   "start": 2.0,
+   "end": 3.0,
+   "line": "",
+   "scene": "bigFace avô com dor",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c04",
+   "start": 3.0,
+   "end": 4.25,
+   "line": "",
+   "scene": "brilho verde, avô aliviado",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "flash",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.4,
+     "name": "shimmer",
+     "gain": -6
+    },
+    {
+     "at": 0.45,
+     "name": "powerup",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c05",
+   "start": 4.25,
+   "end": 5.55,
+   "line": "",
+   "scene": "bigFace você maravilhado olhando as mãos",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "ding",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c06",
+   "start": 5.55,
+   "end": 7.55,
+   "line": "",
+   "scene": "O DOM DE CURAR: toque no ombro de alguém, brilho",
+   "set": "rua",
+   "bars": "none",
+   "in": {
+    "type": "whip",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.0,
+     "name": "whoosh",
+     "gain": -8
+    },
+    {
+     "at": 1.0,
+     "name": "shimmer",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c07",
+   "start": 7.55,
+   "end": 9.9,
+   "line": "",
+   "scene": "DIA 1: você cura mãe e pai na sala",
+   "set": "casa",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "pop",
+     "gain": -10
+    },
+    {
+     "at": 1.3,
+     "name": "pop",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c08",
+   "start": 9.9,
+   "end": 12.6,
+   "line": "",
+   "scene": "DIA 2: fila na porta",
+   "set": "porta",
+   "bars": "none",
+   "in": {
+    "type": "whip",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.0,
+     "name": "swish",
+     "gain": -10
+    },
+    {
+     "at": 0.4,
+     "name": "murmur",
+     "gain": -16,
+     "dur": 2
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c09",
+   "start": 12.6,
+   "end": 15.25,
+   "line": "",
+   "scene": "DIA 3: fila dobra o quarteirão, câmera abre",
+   "set": "rua",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "murmur",
+     "gain": -12,
+     "dur": 2.5
+    },
+    {
+     "at": 1.4,
+     "name": "riser",
+     "gain": -14
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c10",
+   "start": 15.25,
+   "end": 17.0,
+   "line": "",
+   "scene": "contador 150 MIL",
+   "set": "mundo",
+   "bars": "none",
+   "in": {
+    "type": "zoom",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "counter",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c11",
+   "start": 17.0,
+   "end": 20.4,
+   "line": "",
+   "scene": "silhuetas apagando sob chuva, POR DIA",
+   "set": "mundo",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "heartbeat",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c12",
+   "start": 20.4,
+   "end": 22.2,
+   "line": "",
+   "scene": "você cura um por minuto, relógio",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "tick",
+     "gain": -10
+    },
+    {
+     "at": 1.0,
+     "name": "tick",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c13",
+   "start": 22.2,
+   "end": 23.1,
+   "line": "",
+   "scene": "você bocejando de madrugada",
+   "set": "quarto",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "clock",
+     "gain": -14
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c14",
+   "start": 23.1,
+   "end": 26.55,
+   "line": "",
+   "scene": "100 figuras, só 1 acende: MENOS DE 1 EM 100",
+   "set": "blueprint",
+   "bars": "none",
+   "in": {
+    "type": "zoom",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 1.0,
+     "name": "blip",
+     "gain": -10
+    },
+    {
+     "at": 2.0,
+     "name": "stinger",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c15",
+   "start": 26.55,
+   "end": 28.3,
+   "line": "",
+   "scene": "bigFace preocupado",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "riser",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c16",
+   "start": 28.3,
+   "end": 31.3,
+   "line": "",
+   "scene": "QUEM PRIMEIRO? criança x idoso, câmera entre camas",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.1,
+     "name": "heartbeat",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c17",
+   "start": 31.3,
+   "end": 34.6,
+   "line": "",
+   "scene": "você escolhe a criança, a outra cama escurece",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.6,
+     "name": "shimmer",
+     "gain": -8
+    },
+    {
+     "at": 1.6,
+     "name": "hum",
+     "gain": -16,
+     "dur": 1.5
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c18",
+   "start": 34.6,
+   "end": 37.15,
+   "line": "",
+   "scene": "MAS: médicos, enfermeiras, luz dourada",
+   "set": "clinica",
+   "bars": "none",
+   "in": {
+    "type": "dip",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "ding",
+     "gain": -10
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c19",
+   "start": 37.15,
+   "end": 39.5,
+   "line": "",
+   "scene": "VACINAS: fila de braços estendidos",
+   "set": "clinica",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 0.9,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 1.5,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c20",
+   "start": 39.5,
+   "end": 42.0,
+   "line": "",
+   "scene": "contador 154 MILHÕES em 50 ANOS",
+   "set": "mundo",
+   "bars": "none",
+   "in": {
+    "type": "zoom",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.2,
+     "name": "counter",
+     "gain": -10
+    },
+    {
+     "at": 2.0,
+     "name": "ding",
+     "gain": -8
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c21",
+   "start": 42.0,
+   "end": 44.9,
+   "line": "",
+   "scene": "6 POR MINUTO: relógio e 6 figuras acendendo",
+   "set": "mundo",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 0.6,
+     "name": "pop",
+     "gain": -12
+    },
+    {
+     "at": 0.9,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c22",
+   "start": 44.9,
+   "end": 46.5,
+   "line": "",
+   "scene": "bigFace você olha para a câmera",
+   "set": "hospital",
+   "bars": "none",
+   "in": {
+    "type": "cut",
+    "dur": 0.3
+   },
+   "sfx": [],
+   "captions": false,
+   "notes": ""
+  },
+  {
+   "id": "c23",
+   "start": 46.5,
+   "end": 49.7,
+   "line": "",
+   "scene": "QUEM VOCÊ CURARIA PRIMEIRO? elenco",
+   "set": "fim",
+   "bars": "none",
+   "in": {
+    "type": "fade",
+    "dur": 0.3
+   },
+   "sfx": [
+    {
+     "at": 0.3,
+     "name": "pop",
+     "gain": -12
+    }
+   ],
+   "captions": false,
+   "notes": ""
+  }
+ ],
+ "music": [
+  {
+   "start": 0,
+   "end": 15.25,
+   "mood": "hopeful",
+   "intensity": 0.55
+  },
+  {
+   "start": 15.25,
+   "end": 34.6,
+   "mood": "tension",
+   "intensity": 0.6
+  },
+  {
+   "start": 34.6,
+   "end": 49.7,
+   "mood": "triumph",
+   "intensity": 0.6
+  }
+ ]
+}
