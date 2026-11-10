@@ -45,24 +45,26 @@ registerShot('c01', { kind: '3d',
     const cruz = new THREE.Group(); cruz.add(T.box(2.4, 0.8, 0.3, '#c9472f', 0, 0, 0), T.box(0.8, 2.4, 0.3, '#c9472f', 0, 0, 0)); cruz.position.set(0, 20.2, 0.4); st.add(cruz);
     // quarto (atrás da janela, sem a parede da frente)
     st.add(T.box(10, 0.2, 10, '#5a6a7a', 0, 11.1, -5.2), T.box(10, 3.2, 0.2, '#6a8aa0', 0, 12.7, -10), T.box(0.2, 3.2, 10, '#6a8aa0', -4.9, 12.7, -5.2), T.box(0.2, 3.2, 10, '#6a8aa0', 4.9, 12.7, -5.2), T.box(10, 0.2, 10, '#e8eef2', 0, 14.3, -5.2));
-    const cama = new THREE.Group(); cama.add(T.box(2.2, 0.5, 1.1, '#e8eef2', 0, 0.45, 0), T.box(0.12, 1.1, 1.1, '#9aa6b2', 1.05, 0.55, 0), T.box(1.0, 0.35, 1.05, '#b8c8e0', -0.3, 0.75, 0)); cama.position.set(0.9, 11.2, -7); st.add(cama);
+    const cama = new THREE.Group(); cama.add(T.box(2.2, 0.5, 1.1, '#e8eef2', 0, 0.45, 0), T.box(0.12, 1.1, 1.1, '#9aa6b2', 1.05, 0.55, 0), T.box(0.12, 0.9, 1.1, '#9aa6b2', -1.05, 0.45, 0), T.box(1.3, 0.12, 1.05, '#b8c8e0', 0.4, 0.78, 0.0)); cama.position.set(0.9, 11.2, -7); st.add(cama);
     st.add(T.box(0.05, 1.9, 0.05, '#9aa6b2', 2.4, 12.15, -7.6), T.box(0.35, 0.45, 0.1, '#bfe4ff', 2.4, 13.0, -7.6));
     const tela = T.windowPane(1.1, 0.7, { glowColor: '#7dffa8', cols: 1, rows: 1, power: 0.9 }); tela.position.set(-2.2, 13.0, -9.85); st.add(tela);
     const luz = new THREE.PointLight('#fff0dc', 14, 14, 1.4); luz.position.set(0, 13.9, -5); st.add(luz); const luz2 = new THREE.PointLight('#cfe8ff', 6, 10, 1.4); luz2.position.set(0, 12.8, -1.5); st.add(luz2);
-    const avo = T.figure3D(AVO, { rim: '#ffd39b', pose: POSES.sitBack }); avo.position.set(1.2, 11.75, -7); avo.rotation.y = Math.PI; st.add(avo);
+    const avo = T.figure3D(AVO, { rim: '#ffd39b', pose: POSES.lie }); avo.rotation.z = Math.PI / 2; avo.position.set(2.0, 12.05, -7); st.add(avo);
     const voce = T.figure3D(VOCE, { rim: '#7dffa8', pose: POSES.stand }); voce.position.set(-0.7, 11.2, -7); st.add(voce);
     return { stage: st, voce }; },
   draw(s, t, info, T) { s.voce.setPose(blend(t)); 
     T.dolly(s.stage.camera, t, [[0, { pos: [26, 62, 70], look: [0, 12, 0] }], [1.1, { pos: [8, 28, 36], look: [0, 12.5, 0] }], [1.9, { pos: [0, 12.8, 9], look: [0, 12.6, -2] }], [2.3, { pos: [0, 12.6, 0.8], look: [0.2, 12.3, -7] }], [info.dur, { pos: [0.05, 12.45, -0.4], look: [0.25, 12.1, -7] }]]); },
   overlay(g, t) { FX.dust(g, t, { count: 30, color: '#ffe8c0', a: 0.25 }); } });
 const blend = (t) => { const k = clamp((t - 2.2) / 0.5); const a = POSES.stand, b = { ...POSES.reach, hF: [52, -150], eF: [30, -150] }; const o = {}; for (const key in a) o[key] = [a[key][0] + (b[key][0] - a[key][0]) * k, a[key][1] + (b[key][1] - a[key][1]) * k]; return o; };
-registerShot('c04', { draw(g, t, info) { blurLayer(g, 14, (g) => hospital(g, t, { z: 1.4, x: 120, y: -120 })); veil(g, '#08101a', 0.35); const M = mood('interiorCool'); const k = ease.out(prog(t, 0.3, 0.8));
-  bigFace(g, E.W / 2, E.H * 0.55, 330 * (1 + 0.05 * t), { outfit: AVO, expr: t < 0.45 ? 'surprised' : 'joy', look: [0, 0], rimColor: CURA, rimSide: -1 });
-  brilho(g, E.W / 2, E.H * 0.85, t, k); FX.dust(g, t, { count: 60, color: CURA, a: 0.5 * k, speed: 40 });
-} });
-registerShot('c05', { draw(g, t, info) { blurLayer(g, 14, (g) => hospital(g, t, { z: 1.5, x: -160, y: -140 })); veil(g, '#08101a', 0.4); const M = mood('interiorCool');
-  bigFace(g, E.W / 2, E.H * 0.5, 320 * (1 + 0.06 * t), { outfit: VOCE, expr: 'awe', look: [0, 0.8], rimColor: CURA, rimSide: 1 });
-  brilho(g, E.W / 2 - 150, E.H * 0.9, t, 0.8); brilho(g, E.W / 2 + 160, E.H * 0.9, t + 0.3, 0.8);
+registerShot('c04', { draw(g, t, info) { const cam = push(t, info.dur, 1.0, 1.1, 20, 0); const { GY, M } = hospital(g, t, cam, { jx: 160 });
+  layer(g, cam, 1, (g) => { const bx = E.W / 2 + 120, topo = GY - 150; cama(g, bx - 240, GY, M, { w: 480, cor: '#dfe8f0' });
+    const cura = ease.out(prog(t, 0.45, 0.9)), senta = ease.inOut(prog(t, 0.9, 1.5)), levanta = ease.inOut(prog(t, 1.5, 2.0));
+    if (senta < 0.5) { rr(g, bx - 230, topo - 34, 120, 36, 14); g.fillStyle = '#f4f8fc'; g.fill(); drawFigure(g, { x: bx + 110, y: topo + 126, s: 1.55, facing: 1, rot: -Math.PI / 2 + senta * 1.2, pose: POSES.lie, outfit: AVO, expr: cura > 0.5 ? 'surprised' : 'sad', rim: { color: cura > 0.3 ? CURA : M.rim, dir: [0, -1] }, shadow: false }); rr(g, bx - 90, topo - 40, 320, 50, 18); g.fillStyle = '#b8c8e0'; g.fill(); }
+    else if (levanta < 0.05) drawFigure(g, { x: bx - 40, y: topo + 30, s: 1.65, facing: -1, pose: POSES.sit, outfit: AVO, expr: 'happy', rim: { color: CURA, dir: [0, -1] }, shadow: false });
+    else drawFigure(g, { x: lerp(bx - 60, bx - 160, levanta), y: lerp(topo + 30, GY, levanta), s: 1.75, facing: -1, pose: breathe(levanta > 0.9 ? POSES.cheer : POSES.stand, t, 1, 2), outfit: AVO, expr: 'joy', rim: { color: CURA, dir: [0, -1] } });
+    drawFigure(g, { x: E.W / 2 - 330, y: GY, s: 1.85, facing: 1, outfit: VOCE, pose: breathe(t < 1.0 ? POSES.reach : POSES.handsOnHead, t), expr: t < 0.5 ? 'worried' : t < 1.0 ? 'surprised' : 'awe', rim: { color: CURA, dir: [1, -0.5] } });
+    brilho(g, bx - 10, topo - 60, t, cura * (1 - prog(t, 1.6, 2.4) * 0.5)); });
+  FX.dust(g, t, { count: 60, color: CURA, a: 0.45 * prog(t, 0.45, 0.9), speed: 30 });
 } });
 registerShot('c06', { draw(g, t, info) { const cam = push(t, info.dur, 0.95, 1.08, 0, 20); const { GY, M } = rua(g, t, cam, { mood: 'dusk' });
   layer(g, cam, 0.92, (g) => { carro(g, E.W / 2 - 520 + t * 300, GY - 34, 1.0, 0, '#3a6ea5'); carro(g, E.W / 2 + 700 - t * 200, GY - 34, 1.0, 0, '#f2c94c'); for (let i = 0; i < 5; i++) drawFigure(g, { x: -200 + ((i * 260 + t * 90 * (i % 2 ? 1 : -1)) % 1500), y: GY - 40, s: 0.8, facing: i % 2 ? 1 : -1, pose: walkPose(t * 6 + i), expr: 'neutral', rim: { color: M.rim, dir: [-1, -0.5] }, dim: 0.25 }); });

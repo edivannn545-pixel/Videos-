@@ -17,7 +17,7 @@
  },
  "sfx": {
   "enabled": true,
-  "gainDb": -6
+  "gainDb": -3
  },
  "loudness": -14
 }
