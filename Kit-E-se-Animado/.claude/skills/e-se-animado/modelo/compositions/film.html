@@ -1,0 +1,15 @@
+<template>
+<style>
+@font-face{font-family:'Fraunces';src:url('assets/fonts/fraunces-black.ttf');font-weight:900}
+@font-face{font-family:'Caveat';src:url('assets/fonts/caveat-700.woff2');font-weight:700}
+#root{position:absolute;inset:0;background:#111}
+#film3d{position:absolute;left:0;top:0;width:1080px;height:1920px;display:block}
+</style>
+<div id="root" data-composition-id="film" data-width="1080" data-height="1920">
+<canvas id="film3d" width="1080" height="1920"></canvas>
+</div>
+<script src="assets/js/film.js"></script>
+<script>
+window.__timelines["film"]=gsap.timeline({paused:true}).set({}, {}, __TOTAL__);
+</script>
+</template>

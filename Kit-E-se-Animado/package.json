@@ -1,0 +1,14 @@
+{
+  "name": "kit-e-se-animado",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Vídeos verticais animados no estilo E se, com Claude e HyperFrames",
+  "scripts": {
+    "setup": "node tools/preparar.mjs"
+  },
+  "dependencies": {
+    "three": "0.170.0",
+    "esbuild": "0.24.0"
+  }
+}
