@@ -45,6 +45,14 @@ export function cromo() {
   P.eyeR = B(scr, 1.8, 0.7, 0, 1.0, 1.4, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.05, shadow: false });
   P.mouth = pivot(scr, 0, -1.2, 0, 'mouth');
   for (const [x, y, w] of [[-1.2, 0.25, 0.6], [0, 0, 1.9], [1.2, 0.25, 0.6]]) B(P.mouth, x, y, 0, w, 0.45, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.04, shadow: false });
+  // extra expressions (hidden by default)
+  P.happy = pivot(scr, 0, 0, 0, 'happy'); P.happy.visible = false;
+  for (const sx of [-1.8, 1.8]) { B(P.happy, sx - 0.55, 0.45, 0, 0.6, 0.45, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.04, shadow: false }); B(P.happy, sx, 0.9, 0, 0.6, 0.45, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.04, shadow: false }); B(P.happy, sx + 0.55, 0.45, 0, 0.6, 0.45, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.04, shadow: false }); }
+  P.bigMouth = pivot(scr, 0, -1.2, 0, 'bigMouth'); P.bigMouth.visible = false;
+  for (const [x, y, w] of [[-1.7, 0.45, 0.55], [-1.2, 0.0, 0.6], [0, -0.3, 2.0], [1.2, 0.0, 0.6], [1.7, 0.45, 0.55]]) B(P.bigMouth, x, y, 0, w, 0.5, 0.1, 0x5ee6c8, { glow: 0.9, r: 0.04, shadow: false });
+  P.blush = pivot(scr, 0, 0, 0, 'blush'); P.blush.visible = false;
+  for (const sx of [-3.0, 3.0]) B(P.blush, sx, -0.4, 0, 1.2, 0.55, 0.1, 0xff7aa8, { glow: 0.8, r: 0.05, shadow: false });
+  P.tears = []; for (const sx of [-1.8, 1.8]) { const d = B(scr, sx, -0.2, 0.15, 0.55, 0.75, 0.3, 0xd9a520, { metal: 0.8, rough: 0.15, r: 0.15, shadow: false }); d.visible = false; P.tears.push(d); }
   for (const s of [-1, 1]) { B(head, s * 5.15, 3.6, 0, 0.6, 3.2, 3.2, 0xd6267f); B(head, s * 5.35, 3.6, 0, 0.3, 1.6, 1.6, 0x2b2b30); }
   B(head, 0, 7.6, 0, 0.5, 1.6, 0.5, 0x3a3d44); B(head, 0, 8.8, 0, 1.3, 1.3, 1.3, 0xd6267f);
   root.userData.parts = P; return root;
@@ -169,3 +177,6 @@ export function lanterna() {
   B(g, 0, 6.6, 0, 3.6, 3.8, 3.2, 0x3a3328, { r: 0.2 }); B(g, 0, 6.6, 0, 2.4, 2.6, 3.4, 0xffd04a, { glow: 1.6, r: 0.1, shadow: false });
   const l = new THREE.PointLight(0xffc040, 40, 20, 2); l.position.set(0, 6.6, 2.5); g.add(l); return g;
 }
+
+export function mala() { const g = new THREE.Group(); B(g, 0, 0, 0, 5, 6, 2.6, 0xc8783a, { r: 0.3 }); B(g, 0, 0, 1.35, 5.1, 0.6, 0.2, 0x5a3a20); B(g, 0, 3.4, 0, 2, 0.6, 0.6, 0x5a3a20); return g; }
+export function carretel() { const g = new THREE.Group(); B(g, 0, 0, 0, 1.6, 1.6, 1.6, 0xf2f2f2, { r: 0.3 }); B(g, 0, 0, 0, 2.2, 0.4, 2.2, 0x8a5a34); return g; }

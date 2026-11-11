@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 const geoCache = new Map(), matCache = new Map();
 export function mat(color, o = {}) {
   const k = color + JSON.stringify(o);
@@ -13,7 +14,7 @@ export function mat(color, o = {}) {
 }
 function geo(w, h, d, r) {
   const k = [w, h, d, r].join(',');
-  if (!geoCache.has(k)) geoCache.set(k, r > 0 ? new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 2 - 0.01, h / 2 - 0.01, d / 2 - 0.01)) : new THREE.BoxGeometry(w, h, d));
+  if (!geoCache.has(k)) geoCache.set(k, r > 0 ? new RoundedBoxGeometry(w, h, d, 1, Math.min(r, w / 2 - 0.01, h / 2 - 0.01, d / 2 - 0.01)) : new THREE.BoxGeometry(w, h, d));
   return geoCache.get(k);
 }
 // box centred at (x,y,z) with size (w,h,d)
@@ -69,4 +70,23 @@ export function humanoid(o) {
   if (!o.noFace) face(head, { fz: 3.6, cy: 4.0, eyes: o.eyes ?? 'dot', mouth: o.mouth ?? 'smile' });
   root.userData.parts = P;
   return root;
+}
+
+// merge plain child meshes of every group (same material) into one mesh; keeps named/hidden/animated ones
+export function mergeStatic(root, keep = new Set()) {
+  const groups = []; root.traverse(o => { if (o.isGroup || o === root) groups.push(o); });
+  for (const g of groups) {
+    const byMat = new Map();
+    for (const ch of [...g.children]) {
+      if (!ch.isMesh || keep.has(ch) || !ch.visible || ch.geometry.type === 'CylinderGeometry' && false) continue;
+      if (ch.material.transparent) continue;
+      const k = ch.material.uuid; if (!byMat.has(k)) byMat.set(k, []); byMat.get(k).push(ch);
+    }
+    for (const [, list] of byMat) {
+      if (list.length < 2) continue;
+      const geos = list.map(m => { m.updateMatrix(); const gg = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone(); gg.applyMatrix4(m.matrix); return gg; });
+      const merged = new THREE.Mesh(mergeGeometries(geos), list[0].material); merged.castShadow = true; merged.receiveShadow = true;
+      list.forEach(m => g.remove(m)); g.add(merged);
+    }
+  }
 }

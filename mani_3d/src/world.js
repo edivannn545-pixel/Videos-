@@ -16,18 +16,22 @@ export class Batch {
   box(x, y, z, w, h, d, color, kind = 'std', ry = 0) { this.add(kind, x, y + h / 2, z, w, h, d, color, ry); }
   build(scene) {
     const meshes = {};
-    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), c = new THREE.Color();
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), c = new THREE.Color(), v = new THREE.Vector3(), sc = new THREE.Vector3();
+    const CELL = 70;
     for (const k in this.items) {
       const L = this.items[k]; if (!L.length) continue;
-      const geo = k === 'flat' ? new THREE.BoxGeometry(1, 1, 1) : new RoundedBoxGeometry(1, 1, 1, 2, 0.12);
+      const geo = k === 'flat' ? new THREE.BoxGeometry(1, 1, 1) : new RoundedBoxGeometry(1, 1, 1, 1, 0.12);
       const mat = KINDS[k]();
-      const im = new THREE.InstancedMesh(geo, mat, L.length);
-      L.forEach(([x, y, z, w, h, d, col, ry], i) => {
-        e.set(0, ry, 0); q.setFromEuler(e); m4.compose(new THREE.Vector3(x, y, z), q, new THREE.Vector3(w, h, d));
-        im.setMatrixAt(i, m4); im.setColorAt(i, c.set(col));
-      });
-      im.castShadow = k !== 'flat' && k !== 'water'; im.receiveShadow = true;
-      scene.add(im); meshes[k] = im;
+      const cells = new Map();
+      for (const it of L) { const key = Math.floor(it[0] / CELL) + ',' + Math.floor(it[2] / CELL); if (!cells.has(key)) cells.set(key, []); cells.get(key).push(it); }
+      const list = [];
+      for (const [, items] of cells) {
+        const im = new THREE.InstancedMesh(geo, mat, items.length);
+        items.forEach(([x, y, z, w, h, d, col, ry], i) => { e.set(0, ry, 0); q.setFromEuler(e); m4.compose(v.set(x, y, z), q, sc.set(w, h, d)); im.setMatrixAt(i, m4); im.setColorAt(i, c.set(col)); });
+        im.computeBoundingSphere(); im.frustumCulled = true;
+        im.castShadow = k !== 'flat' && k !== 'water'; im.receiveShadow = true; scene.add(im); list.push(im);
+      }
+      meshes[k] = { material: mat, list };
     }
     return meshes;
   }
@@ -106,6 +110,15 @@ export function groundH(x, z) {
   return 0;
 }
 
+export function blocked(x, z) {
+  const rp = Math.hypot(x, z);
+  if (rp < 105 && z > -5 && Math.abs(x) < 80) return true;            // in front of plaza
+  if (x > -80 && x < 95 && z > 85 && z < 185) return true;              // front road & meadow
+  if (x > -85 && x < -20 && z > 45 && z < 105) return true;             // Cromo's home
+  if (Math.hypot(x - HILL.x, z - HILL.z) < HILL.r - 8) return true;     // hill
+  if (x > 70 && x < 230 && z > -205 && z < -135) return true;           // station
+  return false;
+}
 export function buildWorld(scene, opt = {}) {
   const b = new Batch(); const R = rng(opt.seed ?? 42);
   const G = [0x6fd36b, 0x7ddc72, 0x63c95f, 0x86e07a, 0x5bc05a];
@@ -137,7 +150,7 @@ export function buildWorld(scene, opt = {}) {
   const ring = [];
   for (let i = 0; i < 9; i++) { const a = -Math.PI * 0.06 - i * (Math.PI * 1.12 / 8); ring.push(a); }
   ring.forEach((a, i) => { const x = Math.cos(a) * 76, z = Math.sin(a) * 76 - 4; if (Math.hypot(x - HILL.x, z - HILL.z) < HILL.r + 14) return; house(b, R, x, z, -a - Math.PI / 2); });
-  for (const [x, z, ry] of [[-70, 40, Math.PI / 2 - 0.3], [70, 40, -Math.PI / 2 + 0.3], [-95, 75, Math.PI / 2], [95, 80, -Math.PI / 2], [-40, 95, Math.PI * 0.9], [40, 100, -Math.PI * 0.9]]) house(b, R, x, z, ry);
+  for (const [x, z, ry] of [[-70, 40, Math.PI / 2 - 0.3], [70, 40, -Math.PI / 2 + 0.3], [-95, 75, Math.PI / 2], [95, 80, -Math.PI / 2], [-110, 120, Math.PI * 0.8], [120, 135, -Math.PI * 0.8]]) house(b, R, x, z, ry);
   // Cromo's house with fence and gate
   const ch = house(b, R, -58, 70, Math.PI / 2 - 0.2, { wall: 0xa8d8ff, roof: 0xd6267f, w: 22, h: 16 });
   fence(b, -42, 56, -42, 64); fence(b, -42, 76, -42, 86);
@@ -147,6 +160,7 @@ export function buildWorld(scene, opt = {}) {
     if (rp < 52 || Math.abs(z + 185) < 12 || (Math.abs(x) < 10 && z > 40)) continue;
     if (rp > 58 && rp < 88 && z < 30) continue; // keep house ring clear
     const r = R();
+    if (blocked(x, z) && r < 0.75) continue;
     if (r < 0.45) tree(b, R, x, z, pick(R, ['green', 'green', 'pink', 'orange', 'mint', 'pine']), 0.8 + R() * 0.5);
     else if (r < 0.75) bush(b, R, x, z, 0.8 + R() * 0.6);
     else if (r < 0.92) for (let k = 0; k < 6; k++) flower(b, R, x + (R() * 2 - 1) * 4, z + (R() * 2 - 1) * 4);
@@ -163,20 +177,25 @@ export function buildWorld(scene, opt = {}) {
   for (let x = -260; x < 260; x += 3) b.box(x, 0, -185, 1.2, 0.5, 9, 0x7a5a3a);
   for (const dz of [-3, 3]) b.add('std', 0, 0.9, -185 + dz, 520, 0.6, 0.6, 0x8c8f99);
   b.box(130, 0, -172, 70, 3, 12, 0xd9d4cc); b.box(130, 3, -167, 70, 0.4, 2, 0xffd23a);
-  for (const px of [100, 115, 130, 145, 160]) b.box(px, 3, -170, 1.2, 14, 1.2, 0x3b6fd6);
-  for (let k = 0; k < 14; k++) b.box(98 + k * 5, 17, -172, 5, 1.4, 14, k % 2 ? 0xff4f7b : 0xffffff);
-  b.box(130, 3, -158, 26, 12, 8, 0xfff1a8); b.box(130, 15, -158, 30, 2, 11, 0x2a9d8f); b.box(130, 9.5, -153.8, 7, 4, 0.4, 0xffffff); b.box(130, 10, -153.6, 5.6, 2.8, 0.3, 0x3b6fd6, 'glow');
+  for (const px of [100, 115, 130, 145, 160]) b.box(px, 3, -177, 1.2, 24, 1.2, 0x3b6fd6);
+  for (let k = 0; k < 14; k++) b.box(98 + k * 5, 27, -172, 5, 1.4, 14, k % 2 ? 0xff4f7b : 0xffffff);
+  b.box(212, 3, -170, 26, 12, 8, 0xfff1a8); b.box(212, 15, -170, 30, 2, 11, 0x2a9d8f); b.box(212, 9.5, -165.8, 7, 4, 0.4, 0xffffff); b.box(212, 10, -165.6, 5.6, 2.8, 0.3, 0x3b6fd6, 'glow'); b.box(176, 0, -172, 40, 3, 12, 0xd9d4cc);
+  for (const px of [92, 168]) { b.box(px, 3, -168, 3.4, 2.4, 3.4, 0xa0703f); b.add('std', px, 6.4, -168, 3.2, 2, 3.2, 0xff8ac0); b.add('std', px, 7.6, -168, 2, 1.4, 2, 0xffd23a); }
   // distant mountains
   for (let i = 0; i < 26; i++) { const a = Math.PI * (1.02 + i / 25 * 0.96), r = 470 + R() * 60, x = Math.cos(a) * r, z = Math.sin(a) * r * 0.9 - 30, hgt = 50 + R() * 60;
     const C = pick(R, [0x7fb7a8, 0x8fa8d8, 0x9c8fd0, 0x7cc0b0]);
     for (let k = 0; k < 7; k++) { const w = (70 - k * 9) * (0.8 + R() * 0.3); b.box(x, k * hgt / 7, z, w, hgt / 7, w, k >= 5 ? 0xffffff : shade(C, 1 - k * 0.03)); } }
-  // clouds
-  for (let i = 0; i < 18; i++) { const x = (R() * 2 - 1) * 280, z = -280 + R() * 200, y = 110 + R() * 60;
-    for (let k = 0; k < 9; k++) { const s = 8 + R() * 10; b.add('std', x + (R() * 2 - 1) * 16, y + R() * 6, z + (R() * 2 - 1) * 8, s, s * 0.7, s, pick(R, [0xffffff, 0xf4f6ff, 0xeef3ff])); } }
-  balloon(b, 60, 120, -120, [0xff4f7b, 0xffd23a]); balloon(b, -40, 140, -200, [0x4fc3ff, 0xffffff]); balloon(b, 190, 105, -40, [0x6fd36b, 0xff8a3d]); balloon(b, -220, 125, 20, [0xb57bff, 0xffd23a]);
+  // clouds (own movable group)
+  const cb = new Batch(); const cloudsG = new THREE.Group(); scene.add(cloudsG);
+  for (let i = 0; i < 22; i++) { const x = (R() * 2 - 1) * 280, z = -280 + R() * 200, y = 110 + R() * 60;
+    for (let k = 0; k < 9; k++) { const s = 8 + R() * 10; cb.add('std', x + (R() * 2 - 1) * 16, y + R() * 6, z + (R() * 2 - 1) * 8, s, s * 0.7, s, pick(R, [0xffffff, 0xf4f6ff, 0xeef3ff])); } }
+  cb.build(cloudsG);
+  const balloons = [];
+  for (const [x, y, z, c] of [[60, 120, -120, [0xff4f7b, 0xffd23a]], [-40, 140, -200, [0x4fc3ff, 0xffffff]], [190, 105, -40, [0x6fd36b, 0xff8a3d]], [-220, 125, 20, [0xb57bff, 0xffd23a]], [-90, 110, -40, [0xff8a3d, 0xffffff]]]) {
+    const g = new THREE.Group(); const bb = new Batch(); balloon(bb, 0, 0, 0, c); bb.build(g); g.position.set(x, y, z); g.userData.base = [x, y, z]; scene.add(g); balloons.push(g); }
   const meshes = b.build(scene);
-  scene.userData.world = { meshes };
-  return meshes;
+  scene.userData.world = { meshes, cloudsG, balloons };
+  return scene.userData.world;
 }
 
 // ---------- birds (animated groups)

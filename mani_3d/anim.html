@@ -1,0 +1,399 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head><body>
+<script type="module">
+import * as THREE from 'three';
+import * as C from './src/chars.js';
+import * as Wd from './src/world.js';
+import { B, mergeStatic } from './src/vox.js';
+
+const W = 1920, H = 1080, FPS = 30;
+const ENV = await (await fetch('env.json')).json();
+const QP = new URLSearchParams(location.search);
+const r = new THREE.WebGLRenderer({ antialias: QP.get('aa') !== '0', preserveDrawingBuffer: true });
+r.setSize(W, H); r.shadowMap.enabled = QP.get('sh') !== '0'; r.shadowMap.type = THREE.PCFSoftShadowMap;
+r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.0;
+document.body.appendChild(r.domElement);
+const S = new THREE.Scene();
+const world = Wd.buildWorld(S);
+const cam = new THREE.PerspectiveCamera(45, W / H, 0.5, 2500);
+
+// ------------------------------------------------ lighting / time of day
+Wd.TIME.evening = { sky: [0x2e2a78, 0xb8608a, 0xf09868], hemi: [0xd8b0c0, 0x4a3a6a, 1.05], sun: [0xff9a60, 1.5, [200, 60, 160]], glow: 1.0, fog: 0xb07a8a };
+Wd.TIME.golden = { sky: [0x4a7ae0, 0xffa0a0, 0xffd890], hemi: [0xffe0c0, 0x9a9ab0, 1.5], sun: [0xffc080, 2.6, [220, 110, 170]], glow: 0.3, fog: 0xffc8a0 };
+const skies = {};
+for (const k in Wd.TIME) { const sk = Wd.sky(S, ...Wd.TIME[k].sky); sk.visible = false; skies[k] = sk; }
+const hemi = new THREE.HemisphereLight(0xffffff, 0x888888, 1); S.add(hemi);
+const sun = new THREE.DirectionalLight(0xffffff, 2); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -80, right: 80, top: 80, bottom: -80, near: 1, far: 900 }); sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.4;
+S.add(sun); S.add(sun.target);
+const starsG = Wd.stars(S);
+S.fog = new THREE.Fog(0xffffff, 320, 1100);
+function setTime(name, focus, flash = 0) {
+  const T = Wd.TIME[name];
+  for (const k in skies) skies[k].visible = k === name;
+  starsG.visible = name === 'night';
+  hemi.color.set(T.hemi[0]); hemi.groundColor.set(T.hemi[1]); hemi.intensity = T.hemi[2] + flash * 3;
+  sun.color.set(T.sun[0]); sun.intensity = T.sun[1] + flash * 2;
+  sun.position.set(...T.sun[2]).add(focus); sun.target.position.copy(focus);
+  S.fog.color.set(T.fog);
+  if (world.meshes.glow) world.meshes.glow.material.emissiveIntensity = T.glow;
+}
+
+// ------------------------------------------------ actors
+const A = {
+  cromo: C.cromo(), vira: C.viraVento(), petala: C.petala(), fuzue: C.fuzue(),
+  goma: C.goma(), nimbo: C.nimbo(), estopim: C.estopim(),
+};
+for (const k in A) { const P0 = A[k].userData.parts; const keep = new Set(); for (const n in P0) { const p = P0[n]; if (Array.isArray(p)) p.forEach(x => keep.add(x)); else if (p && p.isMesh) keep.add(p); } mergeStatic(A[k], keep); }
+for (const k in A) { S.add(A[k]); const P = A[k].userData.parts; for (const n in P) { const p = P[n]; if (p && p.isObject3D) p.userData.base = { pos: p.position.clone(), rot: p.rotation.clone(), vis: p.visible }; } }
+// props
+const tambor = C.tambor(); tambor.position.set(3.6, 4.6, 3.6); A.fuzue.add(tambor);
+const sticks = ['armL', 'armR'].map(a => { const b = C.baqueta(); b.rotation.x = 1.2; A.fuzue.userData.parts[a + 'Hand'].add(b); return b; });
+const lant = C.lanterna(); lant.position.set(5.9, 6.2, 1.6); A.estopim.add(lant);
+const staff = C.cajado(); staff.position.set(5.6, 8, 1.4); A.nimbo.add(staff);
+const caixa = C.caixa(); caixa.scale.setScalar(0.8); S.add(caixa);
+const mala = C.mala(); mala.position.set(0, 3.2, -3.0); A.vira.userData.parts.body.add(mala);
+const pipa = C.pipa(); S.add(pipa);
+const lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+const kiteLine = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: 0xffffff })); S.add(kiteLine);
+const pipaHand = C.pipa(); pipaHand.scale.setScalar(0.45); S.add(pipaHand);
+const train = Wd.train(S, 60, -185);
+
+// birds
+const birds = [];
+const BC = [0xff6f6f, 0x5ab8ff, 0xffd23a, 0xffffff, 0xb57bff, 0xff9a3d];
+const centers = [[0, 70, 0], [-150, 95, -110], [110, 60, -150], [60, 80, 120], [-80, 75, 60]];
+for (let i = 0; i < 34; i++) { const b = Wd.bird(BC[i % BC.length]); b.scale.setScalar(1.1); S.add(b); const c = centers[i % centers.length];
+  b.userData.f = { c, r: 25 + (i * 37 % 40), h: (i * 13 % 25), w: (0.25 + (i % 5) * 0.05) * (i % 2 ? 1 : -1), p: i * 1.7 }; birds.push(b); }
+
+// pools: puffs (smoke), drops (tears/rain), sparkles
+const puffMat = new THREE.MeshStandardMaterial({ color: 0xdcdcdc, roughness: 1 });
+const darkPuffMat = new THREE.MeshStandardMaterial({ color: 0x555560, roughness: 1 });
+const unit = new THREE.BoxGeometry(1, 1, 1);
+const puffs = []; for (let i = 0; i < 80; i++) { const m = new THREE.Mesh(unit, puffMat); m.visible = false; S.add(m); puffs.push(m); }
+let puffIdx = 0;
+function puff(x, y, z, s, mat = puffMat) { if (puffIdx >= puffs.length) return; const m = puffs[puffIdx++]; m.material = mat; m.position.set(x, y, z); m.scale.setScalar(Math.max(0.01, s)); m.rotation.set(x * 0.1, y * 0.1, 0); m.visible = true; }
+// emitter: stateless, particles born every 'every' seconds since t0
+function emitter(t, t0, t1, every, life, fn) { if (t < t0) return; for (let k = 0; ; k++) { const born = t0 + k * every; if (born > t || born > t1) break; const age = t - born; if (age < life) fn(age / life, age, k); } }
+const tearMat = new THREE.MeshStandardMaterial({ color: 0x6fd0ff, roughness: 0.1, metalness: 0.1 });
+const oilMat = new THREE.MeshStandardMaterial({ color: 0xe0a820, roughness: 0.15, metalness: 0.85 });
+const rainMat = new THREE.MeshBasicMaterial({ color: 0xbcd8ff, transparent: true, opacity: 0.6 });
+const RAIN = new THREE.InstancedMesh(new THREE.BoxGeometry(0.25, 3.5, 0.25), rainMat, 1400); RAIN.frustumCulled = false; S.add(RAIN);
+const rainSeed = []; for (let i = 0; i < 1400; i++) rainSeed.push([Math.random() * 180 - 90, Math.random() * 160 - 80, Math.random() * 80]);
+// storm cloud + lightning bolt
+const stormCloud = new THREE.Group(); S.add(stormCloud);
+{ let k = 7; const R = () => ((k = (k * 1664525 + 1013904223) >>> 0) / 4294967296);
+  const cm = [0x4a4d5e, 0x5a5d70, 0x3e4050].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 1 }));
+  for (let i = 0; i < 70; i++) { const m = new THREE.Mesh(unit, cm[i % 3]); const s = 9 + R() * 12; m.scale.set(s, s * 0.7, s); m.position.set((R() * 2 - 1) * 55, R() * 10, (R() * 2 - 1) * 40); stormCloud.add(m); } }
+stormCloud.position.set(-5, 62, 10);
+const bolt = new THREE.Group(); S.add(bolt);
+{ const bm = new THREE.MeshBasicMaterial({ color: 0xfff6a0 }); let x = 0, y = 0; for (let i = 0; i < 9; i++) { const m = new THREE.Mesh(unit, bm); const nx = x + (i % 2 ? 3 : -3); m.position.set((x + nx) / 2, y - 3, 0); m.scale.set(1.2, 7, 1.2); m.rotation.z = (i % 2 ? -0.4 : 0.4); bolt.add(m); x = nx; y -= 6; } }
+bolt.position.set(20, 58, -30);
+// red glow for Estopim
+const redLight = new THREE.PointLight(0xff3020, 0, 40, 2); S.add(redLight);
+
+// ------------------------------------------------ helpers
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const lerp = (a, b, u) => a + (b - a) * u;
+const clamp = (u) => Math.max(0, Math.min(1, u));
+const ease = (u) => { u = clamp(u); return u * u * (3 - 2 * u); };
+const vl = (a, b, u) => V(lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u));
+const gh = (x, z) => Wd.groundH(x, z);
+function camAt(pos, look, fov = 42, t = 0, shake = 0) {
+  const n = 0.25 + shake; cam.position.set(pos.x + Math.sin(t * 0.7) * n, pos.y + Math.sin(t * 0.9 + 1) * n * 0.6, pos.z + Math.cos(t * 0.6) * n);
+  cam.fov = fov; cam.updateProjectionMatrix(); cam.lookAt(look);
+}
+function headPos(o, dy = 0) { const v = new THREE.Vector3(); o.userData.parts.head.getWorldPosition(v); v.y += 4 + dy; return v; }
+function resetAll() {
+  for (const k in A) { const o = A[k]; o.visible = false; o.rotation.set(0, 0, 0); o.scale.setScalar(1); const P = o.userData.parts;
+    for (const n in P) { const p = P[n]; if (p && p.userData && p.userData.base) { p.position.copy(p.userData.base.pos); p.rotation.copy(p.userData.base.rot); p.visible = p.userData.base.vis; p.scale.setScalar(1); } } }
+  const P = A.cromo.userData.parts; P.tears.forEach(d => { d.visible = false; d.position.y = -0.2; d.scale.set(1, 1, 1); });
+  caixa.visible = false; mala.visible = false; pipa.visible = false; kiteLine.visible = false; pipaHand.visible = false;
+  tambor.visible = true; sticks.forEach(s => s.visible = true); lant.visible = true; staff.visible = true;
+  puffs.forEach(p => p.visible = false); puffIdx = 0; RAIN.visible = false; stormCloud.visible = false; bolt.visible = false; redLight.intensity = 0;
+  train.position.set(60, 0, -185);
+}
+function place(k, x, z, ry = 0, y = null) { const o = A[k]; o.visible = true; o.position.set(x, y ?? gh(x, z), z); o.rotation.y = ry; return o; }
+const face = (from, to) => Math.atan2(to[0] - from[0], to[1] - from[1]);
+// --- poses
+function idle(k, t) { const P = A[k].userData.parts; const s = Math.sin(t * 2 + k.length);
+  if (P.body) P.body.position.y += s * 0.12; if (P.head) P.head.rotation.z = Math.sin(t * 1.3 + k.length) * 0.04;
+  if (P.armL) P.armL.rotation.z = -0.08 - s * 0.03; if (P.armR) P.armR.rotation.z = 0.08 + s * 0.03; }
+function walk(k, t, sp = 1) { const P = A[k].userData.parts; const ph = t * 8 * sp, s = Math.sin(ph);
+  P.legL.rotation.x = s * 0.6; P.legR.rotation.x = -s * 0.6; P.armL.rotation.x = -s * 0.5; P.armR.rotation.x = s * 0.5; P.body.position.y += Math.abs(Math.cos(ph)) * 0.35; }
+function talk(k, t, f) { const P = A[k].userData.parts; const e = ENV[Math.floor(t * FPS)] || 0;
+  P.head.rotation.x = -e * 0.12 + Math.sin(t * 6) * 0.03 * e; P.head.rotation.y = Math.sin(t * 2.3) * 0.08;
+  if (P.armR && !f) P.armR.rotation.x = -0.3 - e * 0.6, P.armR.rotation.z = 0.3; }
+function dance(k, t) { const P = A[k].userData.parts; const s = Math.sin(t * 5);
+  A[k].rotation.y += t * 1.5; P.armL.rotation.z = -2.2 - s * 0.4; P.armR.rotation.z = 2.2 - s * 0.4; P.legR.rotation.x = -0.4 - s * 0.3; P.body.position.y += Math.abs(s) * 0.6; }
+function drum(k, t) { const P = A[k].userData.parts; P.armL.rotation.x = -1.0 + Math.sin(t * 14) * 0.45; P.armR.rotation.x = -1.0 + Math.sin(t * 14 + Math.PI) * 0.45; P.armL.rotation.z = -0.2; P.armR.rotation.z = 0.2; P.head.rotation.z = Math.sin(t * 7) * 0.08; }
+function tremble(k, t, a = 0.4) { const o = A[k]; o.position.x += Math.sin(t * 60) * a; o.position.z += Math.cos(t * 53) * a * 0.6; o.scale.set(1 + Math.sin(t * 40) * 0.02, 1 - Math.sin(t * 40) * 0.02, 1); }
+function laugh(k, t) { const P = A[k].userData.parts; const s = Math.abs(Math.sin(t * 9)); A[k].position.y += s * 1.0; if (P.head) P.head.rotation.x = -0.2 - s * 0.1; if (P.armL) { P.armL.rotation.z = -0.6; P.armR.rotation.z = 0.6; } }
+function stomp(k, t) { const P = A[k].userData.parts; const s = Math.sin(t * 9); P.legR.rotation.x = s > 0 ? -s * 0.9 : 0; A[k].position.y += s > 0 ? s * 0.4 : 0; P.armL.rotation.z = -0.5; P.armR.rotation.z = 0.5; P.armL.rotation.x = -0.3; P.armR.rotation.x = -0.3; P.head.rotation.x = 0.1;
+  const hp = headPos(A[k]); const ry = A[k].rotation.y, rx = Math.cos(ry), rz = -Math.sin(ry); emitter(t, 0, 1e9, 0.18, 1.6, (u, age, n) => { const sd = n % 2 ? 1 : -1; const o = sd * (5 + age * 3); puff(hp.x + rx * o - Math.sin(ry) * 1, hp.y - 1 + age * 7, hp.z + rz * o - Math.cos(ry) * 1, 1.2 + u * 2.4, darkPuffMat); });
+  redLight.position.copy(hp).add(V(0, 0, 8)); redLight.intensity = 260 + Math.sin(t * 20) * 60; }
+// --- Cromo
+function cromo(x, z, ry, opt = {}) { const o = place('cromo', x, z, ry); const P = o.userData.parts;
+  if (opt.roll != null) { P.wheel.rotation.x = opt.roll / 2.7; P.body.rotation.x = 0.06; }
+  if (opt.box) { caixa.visible = true; P.armL.rotation.x = -1.25; P.armR.rotation.x = -1.25; o.updateMatrixWorld(); const v = V(0, 7.8, 5.6); o.localToWorld(v); caixa.position.copy(v); caixa.rotation.set(0, ry, 0); }
+  return o; }
+function cromoTalk(t, k = 1) { const P = A.cromo.userData.parts; const e = ENV[Math.floor(t * FPS)] || 0; P.mouth.scale.y = 1 + e * 2.2 * k; P.mouth.scale.x = 1 - e * 0.15; P.head.rotation.x = -e * 0.06; P.armR.rotation.x = -0.2 - e * 0.4; }
+function cromoBlink(t, every = 3.3) { const P = A.cromo.userData.parts; const ph = (t % every); const s = ph < 0.12 ? 0.1 : 1; P.eyeL.scale.y = s; P.eyeR.scale.y = s; }
+function cromoHappy(on) { const P = A.cromo.userData.parts; P.happy.visible = on; P.bigMouth.visible = on; P.blush.visible = on; P.eyeL.visible = !on; P.eyeR.visible = !on; P.mouth.visible = !on; }
+function cromoTears(t, t0, t1) { const P = A.cromo.userData.parts; [t0, t1].forEach((tt, i) => { if (tt == null || t < tt) return; const d = P.tears[i]; d.visible = true; const a = t - tt; d.position.y = -0.2 - Math.min(a * 0.9, 2.6); d.scale.set(1, 1 + Math.min(a, 2) * 0.3, 1); }); }
+// kite flying
+function kite(t, handObj, skyPos, scale = 1) { pipa.visible = true; kiteLine.visible = true; pipa.scale.setScalar(scale);
+  pipa.position.set(skyPos.x + Math.sin(t * 0.8) * 5, skyPos.y + Math.sin(t * 1.3) * 3, skyPos.z + Math.cos(t * 0.6) * 3);
+  pipa.rotation.set(Math.sin(t * 1.1) * 0.1, 0.6 + Math.sin(t * 0.5) * 0.2, 0.25 + Math.sin(t * 1.7) * 0.18);
+  S.updateMatrixWorld(); const h = V(); handObj.getWorldPosition(h); const p = lineGeo.attributes.position; p.setXYZ(0, h.x, h.y, h.z); p.setXYZ(1, pipa.position.x, pipa.position.y - 2, pipa.position.z); p.needsUpdate = true; lineGeo.computeBoundingSphere(); }
+function rain(t, center) { RAIN.visible = true; const m4 = new THREE.Matrix4();
+  rainSeed.forEach(([x, z, o], i) => { const y = 70 - ((t * 70 + o * 9) % 75); m4.makeTranslation(center.x + x, y, center.z + z); RAIN.setMatrixAt(i, m4); }); RAIN.instanceMatrix.needsUpdate = true; }
+
+// ---------------- places
+const PL = { cromo: [0, 26], petala: [10, 20], fuzue: [22, 12], goma: [-14, 22], estopim: [-26, 8], nimbo: [-30, -8] };
+const ROAD = (u) => [0, lerp(170, 52, u)];
+const DOORS = [];
+{ for (let i = 0; i < 9; i++) { const a = -Math.PI * 0.06 - i * (Math.PI * 1.12 / 8); const x = Math.cos(a) * 76, z = Math.sin(a) * 76 - 4; if (Math.hypot(x - Wd.HILL.x, z - Wd.HILL.z) < Wd.HILL.r + 14) continue; const hry = -a - Math.PI / 2; DOORS.push({ x: x + Math.sin(hry) * 15, z: z + Math.cos(hry) * 15, ry: hry + Math.PI, out: hry }); } }
+const HOME = { door: [-47, 71.8] };
+const HX = Wd.HILL.x, HZ = Wd.HILL.z;
+const HILLC = [HX + 2, HZ + 8], HILLV = [HX + 13, HZ + 2];
+const KITE_SKY = V(HX + 60, 100, HZ + 55);
+const toCity = Math.atan2(1, 1);
+const PLAT = 3;
+// camera in front of a character's face (ang = sideways angle, d = distance)
+function fc(o, d, ang = 0.3, dy = 0.6, fov = 36, t = 0, shake = 0, tdy = -0.5) { const h = headPos(o, tdy); const a = o.rotation.y + ang; camAt(V(h.x + Math.sin(a) * d, h.y + dy, h.z + Math.cos(a) * d), h, fov, t, shake); }
+// body-level framing (full body)
+function fb(o, d, ang = 0.4, dy = 4, fov = 40, t = 0, shake = 0) { const p = o.position.clone(); p.y += 9; const a = o.rotation.y + ang; camAt(V(p.x + Math.sin(a) * d, p.y + dy, p.z + Math.cos(a) * d), p, fov, t, shake); }
+
+const SH = [];
+const shot = (t0, t1, tod, fn) => SH.push({ t0, t1, tod, fn });
+let FOCUS = V(0, 0, 0);
+function plazaCrowd(t, o = {}) {
+  if (!o.noPetala) { place('petala', ...PL.petala, -0.4); dance('petala', t); }
+  if (!o.noFuzue) { place('fuzue', ...PL.fuzue, -0.9); drum('fuzue', t); }
+  if (!o.noGoma) { place('goma', ...PL.goma, 0.5); idle('goma', t); }
+  if (!o.noEstopim) { place('estopim', ...PL.estopim, 1.0); idle('estopim', t); }
+  if (!o.noNimbo) { place('nimbo', ...PL.nimbo, 0.6); idle('nimbo', t); }
+}
+// ===== 1 city & feelings
+shot(0, 9.2, 'day', (t, u) => { FOCUS = V(0, 0, 0); plazaCrowd(t); cromo(...PL.cromo, 0); train.position.x = -220 + t * 26;
+  camAt(vl([190, 140, 250], [70, 70, 150], ease(u)), vl([0, 10, -40], [0, 8, 0], ease(u)), 42, t); });
+shot(9.2, 11.7, 'day', (t, u) => { FOCUS = V(0, 0, 10); plazaCrowd(t); cromo(...PL.cromo, 0);
+  camAt(vl([50, 40, 95], [34, 24, 72], ease(u)), V(0, 9, 12), 44, t); });
+shot(11.7, 14.1, 'day', (t, u) => { FOCUS = V(10, 0, 20); plazaCrowd(t); laugh('petala', t); const h = headPos(A.petala, -3);
+  camAt(vl([4, 15, 50], [6, 14, 44], u), h, 38, t); });
+shot(14.1, 15.8, 'day', (t, u) => { FOCUS = V(-14, 0, 22); plazaCrowd(t); tremble('goma', t, 0.25); const h = headPos(A.goma, -2);
+  emitter(t, 14.1, 99, 0.12, 0.7, (uu, age, n) => puff(h.x + (n % 2 ? 1.6 : -1.6), h.y + 1 - age * 14, h.z + 3.2, 0.7, tearMat));
+  fc(A.goma, lerp(26, 22, u), 0.2, 1, 38, t, 0, -2); });
+shot(15.8, 18.0, 'day', (t, u) => { FOCUS = V(-26, 0, 8); plazaCrowd(t, { noGoma: true }); stomp('estopim', t); fc(A.estopim, lerp(26, 22, u), -0.25, 1, 38, t, 0.25, -3); });
+shot(18.0, 21.0, 'day', (t, u) => { FOCUS = V(0, 0, 26); plazaCrowd(t); cromo(...PL.cromo, 0); cromoBlink(t);
+  camAt(vl([0, 18, 72], [0, 15, 46], ease(u)), V(0, 12, 26), 40, t); });
+// ===== 2 deliveries
+shot(21.0, 29.5, 'day', (t, u) => { const [x, z] = ROAD(u); FOCUS = V(x, 0, z); const c = cromo(x, z, Math.PI, { roll: u * 118, box: true }); cromoBlink(t);
+  fb(c, 30, 0.7, 2, 40, t); });
+const D0 = DOORS[DOORS.length - 1];
+shot(29.5, 35.7, 'day', (t, u) => { const k = ease(u * 1.6); const sx = D0.x + Math.sin(D0.out) * lerp(22, 0, k), sz = D0.z + Math.cos(D0.out) * lerp(22, 0, k);
+  FOCUS = V(sx, 0, sz); const c = cromo(sx, sz, D0.ry, { roll: k * 22, box: u < 0.7 });
+  if (u >= 0.7) { caixa.visible = true; caixa.position.set(D0.x - Math.sin(D0.out) * 6, 1.6, D0.z - Math.cos(D0.out) * 6); c.userData.parts.head.rotation.x = Math.sin(clamp((u - 0.75) * 4) * Math.PI) * 0.3; }
+  cromoBlink(t); camAt(V(D0.x + Math.sin(D0.out + 1.1) * 30, 13, D0.z + Math.cos(D0.out + 1.1) * 30), V(sx, 8, sz), 40, t); });
+shot(35.7, 41.0, 'day', (t, u) => { FOCUS = V(D0.x, 0, D0.z); const c = cromo(D0.x, D0.z, D0.out); cromoBlink(t, 2.6);
+  caixa.visible = true; caixa.position.set(D0.x - Math.sin(D0.out) * 6, 1.6, D0.z - Math.cos(D0.out) * 6); fc(c, lerp(30, 12, ease(u)), 0.1, 0.5, 36, t); });
+shot(41.0, 44.4, 'day', (t, u) => { FOCUS = V(D0.x, 0, D0.z); const c = cromo(D0.x, D0.z, D0.out); cromoTalk(t); cromoBlink(t);
+  caixa.visible = true; caixa.position.set(D0.x - Math.sin(D0.out) * 6, 1.6, D0.z - Math.cos(D0.out) * 6); fc(c, 13, 0.45, 0.5, 36, t); });
+for (let i = 0; i < 2; i++) { const D = DOORS[i]; const t0 = 44.4 + i * 2.0;
+  shot(t0, t0 + 2.0, 'day', (t, u) => { FOCUS = V(D.x, 0, D.z); const c = cromo(D.x, D.z, D.ry, { box: u < 0.5 }); cromoBlink(t);
+    if (u >= 0.5) { caixa.visible = true; caixa.position.set(D.x - Math.sin(D.out) * 6, 1.6, D.z - Math.cos(D.out) * 6); c.userData.parts.head.rotation.x = 0.25; }
+    fb(c, 30, Math.PI + (i ? 0.5 : -0.5), 6 + i * 4, 42, t); }); }
+shot(48.4, 51.1, 'day', (t, u) => { const [x, z] = ROAD(0.5); FOCUS = V(x, 0, z); const c = cromo(x, z, 0); cromoBlink(t);
+  camAt(vl([x + 4, 13, z + 18], [x + 20, 45, z + 75], ease(u)), V(x, 9, z), 40, t); });
+// ===== 3 Vira-Vento
+shot(51.1, 58.0, 'day', (t, u) => { const vx = lerp(60, 26, u), vz = lerp(128, 112, u); FOCUS = V(vx, 0, vz);
+  const v = place('vira', vx, vz, face([60, 128], [26, 112])); walk('vira', t, 1.4); const P = v.userData.parts; P.armR.rotation.x = 0; P.armR.rotation.z = 2.5;
+  kite(t, P.armRHand, V(vx + 25, 62, vz - 35), 0.8);
+  const cx = lerp(-6, 6, ease(u)), cz = lerp(118, 114, u); cromo(cx, cz, face([cx, cz], [vx, vz]), { roll: u * 12 }); cromoBlink(t);
+  camAt(vl([0, 14, 168], [8, 15, 158], u), V(lerp(vx, cx, 0.5), 11, lerp(vz, cz, 0.5)), 44, t); });
+shot(58.0, 62.8, 'sunset', (t, u) => { FOCUS = V(HX, 40, HZ); const k = ease(u);
+  const vx = lerp(HX + 40, HILLV[0], k), vz = lerp(HZ + 40, HILLV[1], k), cx = lerp(HX + 30, HILLC[0], k), cz = lerp(HZ + 46, HILLC[1], k);
+  const v = place('vira', vx, vz, Math.PI + toCity); walk('vira', t, 1); cromo(cx, cz, Math.PI + toCity, { roll: k * 40 });
+  kite(t, v.userData.parts.armRHand, V(HX + 40, 95, HZ + 30), 1.0);
+  camAt(vl([HX + 95, 70, HZ + 95], [HX + 70, 62, HZ + 72], u), V(lerp(vx, cx, 0.5), 50, lerp(vz, cz, 0.5)), 44, t); });
+function hillPair(t) { const v = place('vira', ...HILLV, toCity); const c = cromo(...HILLC, toCity + 0.25); cromoBlink(t);
+  const P = v.userData.parts; P.armR.rotation.z = 2.6; kite(t, P.armRHand, KITE_SKY, 1.1); return { v, c }; }
+shot(62.8, 67.0, 'sunset', (t, u) => { FOCUS = V(HX, 40, HZ); const { c } = hillPair(t); c.rotation.y = face(HILLC, HILLV) - 0.9; cromoTalk(t); fc(c, 12, 0.3, 1, 36, t); });
+shot(67.0, 71.7, 'sunset', (t, u) => { FOCUS = V(HX, 40, HZ); const { v } = hillPair(t); v.rotation.y = face(HILLV, HILLC) + 0.9; talk('vira', t, true); fc(v, 13, -0.3, 1, 36, t, 0, -1); });
+shot(71.7, 75.5, 'sunset', (t, u) => { FOCUS = V(HX, 40, HZ); const { c } = hillPair(t); c.rotation.y = face(HILLC, HILLV) - 0.9; cromoTalk(t); const P = c.userData.parts;
+  P.head.rotation.x = 0.35 * ease(u * 3); P.armL.rotation.x = -0.9 * ease(u * 3); P.armL.rotation.z = 0.4; fc(c, 16, 0.2, 3, 36, t, 0, -1); });
+// ===== 4 night
+shot(75.5, 83.6, 'night', (t, u) => { FOCUS = V(HX, 40, HZ); const c = cromo(...HILLC, toCity); c.userData.parts.head.rotation.x = -0.45; cromoBlink(t, 4);
+  const h = headPos(c, -2); const a = lerp(Math.PI + toCity, toCity + 0.6, ease(u));
+  camAt(V(h.x + Math.sin(a) * 26, h.y + lerp(-1, 5, u), h.z + Math.cos(a) * 26), V(h.x, h.y + lerp(14, 2, ease(u)), h.z), 50, t); });
+shot(83.6, 87.0, 'night', (t, u) => { FOCUS = V(HX, 40, HZ); const c = cromo(...HILLC, toCity); cromoTalk(t); const P = c.userData.parts;
+  const g = 1 + Math.sin(t * 10) * 0.2; P.eyeL.scale.set(g, g, 1); P.eyeR.scale.set(g, g, 1); fc(c, 14, 0, 1, lerp(38, 30, u), t); });
+// ===== 5 joy
+const CJ = [0, 34];
+shot(87.0, 94.0, 'day', (t, u) => { FOCUS = V(0, 0, 18); plazaCrowd(t); const k = ease(u * 1.4); cromo(0, lerp(80, CJ[1], k), Math.PI, { roll: k * 46 }); cromoBlink(t);
+  camAt(vl([50, 30, 90], [30, 16, 66], ease(u)), V(4, 8, 26), 44, t); });
+shot(94.0, 97.4, 'day', (t, u) => { FOCUS = V(10, 0, 20); plazaCrowd(t, { noPetala: true }); const p = place('petala', 8, 26, face([8, 26], CJ)); talk('petala', t, true); const P = p.userData.parts; P.armL.rotation.z = -2.0; P.armR.rotation.z = 2.0 + Math.sin(t * 6) * 0.3;
+  cromo(...CJ, face(CJ, [8, 26])); cromoBlink(t); fc(p, 17, -1.2, 1, 38, t, 0, -2); });
+shot(97.4, 102.2, 'day', (t, u) => { FOCUS = V(0, 0, 30); plazaCrowd(t, { noPetala: true }); place('petala', 8, 26, -0.5); dance('petala', t);
+  const c = cromo(...CJ, 0); const P = c.userData.parts; const lt = t - 97.4;
+  c.rotation.y = lt < 2 ? 0 : lt < 3.3 ? Math.sin((lt - 2) * 4) * 1.2 : -Math.sin((lt - 3.3) * 4) * 1.2; P.armL.rotation.z = -2.2; P.armR.rotation.z = 2.2; P.wheel.rotation.x = lt * 6;
+  camAt(V(12, 13, 64), V(2, 9, 32), 40, t); });
+shot(102.2, 105.6, 'day', (t, u) => { FOCUS = V(0, 0, 30); plazaCrowd(t, { noPetala: true }); place('petala', 8, 26, -0.5); idle('petala', t);
+  const c = cromo(...CJ, 0); const P = c.userData.parts; const k = ease((t - 102.2) / 0.5); c.rotation.z = k * 1.45; c.position.y += k * 2.2; P.wheel.rotation.x = t * 14; P.armL.rotation.z = -2.2 * (1 - k); P.armR.rotation.z = 2.2;
+  camAt(V(4, 7, 62), V(-2, 4, 34), 40, t, k < 1 && k > 0 ? 0.6 : 0); });
+shot(105.6, 107.3, 'day', (t, u) => { FOCUS = V(0, 0, 26); plazaCrowd(t, { noPetala: true }); place('petala', 8, 26, 0.3);
+  for (const k of ['petala', 'fuzue', 'goma', 'estopim', 'nimbo']) laugh(k, t);
+  const c = cromo(...CJ, 0); c.rotation.z = 1.45; c.position.y += 2.2; c.userData.parts.wheel.rotation.x = t * 10;
+  camAt(V(8, 30, 98), V(-4, 8, 20), 44, t); });
+shot(107.3, 111.5, 'day', (t, u) => { FOCUS = V(0, 0, 30); plazaCrowd(t, { noPetala: true }); place('petala', 8, 26, 0.3); idle('petala', t);
+  const c = cromo(...CJ, 0); c.rotation.z = 1.45; c.position.y += 2.2; c.userData.parts.wheel.rotation.x = 105 + (t - 107.3) * lerp(6, 0, u); cromoBlink(t, 1.2);
+  const h = headPos(c, -3); camAt(V(h.x + 2, 4.5, h.z + lerp(20, 14, u)), V(h.x, h.y - 2, h.z), 38, t); });
+shot(111.5, 114.3, 'day', (t, u) => { FOCUS = V(0, 0, 30); plazaCrowd(t, { noPetala: true }); place('petala', 8, 26, -0.4); idle('petala', t);
+  const c = cromo(...CJ, 0); const k = 1 - ease((t - 111.5) / 0.6); c.rotation.z = k * 1.45; c.position.y += k * 2.2; cromoTalk(t); cromoBlink(t); fc(c, 14, 0.3, 0.5, 36, t); });
+// ===== 6 fear
+const GP = [-10, 40], CP = [0, 44], NP = [14, 54];
+shot(114.3, 120.0, 'day', (t, u) => { FOCUS = V(0, 0, 40); const g = place('goma', ...GP, 0.5); tremble('goma', t, 0.3); cromo(...CP, -0.4); cromoBlink(t); place('nimbo', ...NP, -2.4); idle('nimbo', t);
+  fc(g, lerp(30, 22, u), 0.3, 2, 40, t, 0, -2); });
+shot(120.0, 124.0, 'storm', (t, u) => { FOCUS = V(0, 0, 40); const lt = t - 120; place('goma', ...GP, 0.5); tremble('goma', t, 0.5); cromo(...CP, -0.4); cromoBlink(t);
+  const n = place('nimbo', ...NP, -2.4); const P = n.userData.parts; P.armR.rotation.z = 2.8; staff.position.set(4, 18, 1.4);
+  stormCloud.visible = true; stormCloud.scale.setScalar(lerp(0.3, 1, ease(lt / 2.5))); stormCloud.position.set(0, 62, 40); rain(t, V(0, 0, 40));
+  const fl = (lt > 1.3 && lt < 1.45) || (lt > 2.8 && lt < 2.95) ? 1 : 0; bolt.visible = fl > 0; bolt.position.set(30, 58, 10); setTime('storm', FOCUS, fl);
+  camAt(vl([40, 22, 100], [30, 26, 86], u), V(0, 22, 40), 46, t, fl * 1.2); });
+shot(124.0, 127.7, 'storm', (t, u) => { FOCUS = V(0, 0, 40); place('goma', CP[0] - 3, CP[1] - 7, 0.2); tremble('goma', t, 0.5); const c = cromo(...CP, 0.2); cromoBlink(t);
+  place('nimbo', ...NP, -2.4); stormCloud.visible = true; stormCloud.position.set(0, 62, 40); rain(t, V(0, 0, 40));
+  const fl = (t > 125.4 && t < 125.55) ? 1 : 0; setTime('storm', FOCUS, fl); bolt.visible = fl > 0; bolt.position.set(-30, 58, 0);
+  fb(c, 28, -0.7, 2, 40, t, fl); });
+shot(127.7, 129.7, 'storm', (t, u) => { FOCUS = V(0, 0, 40); const g = place('goma', CP[0] + 7, CP[1] - 2, 0.2); tremble('goma', t, 0.2); talk('goma', t, true);
+  cromo(...CP, 0.2); cromoBlink(t); stormCloud.visible = true; stormCloud.position.set(0, 62, 40); rain(t, V(0, 0, 40)); fc(g, 18, 0.4, 1, 38, t, 0, -2); });
+shot(129.7, 135.9, 'storm', (t, u) => { FOCUS = V(0, 0, 40); place('goma', CP[0] + 2, CP[1] - 7, 0.2); tremble('goma', t, 0.25); const c = cromo(...CP, 0.2); cromoTalk(t); cromoBlink(t);
+  stormCloud.visible = true; stormCloud.position.set(0, 62, 40); rain(t, V(0, 0, 40)); const fl = (t > 130.0 && t < 130.15) ? 1 : 0; setTime('storm', FOCUS, fl); bolt.visible = fl > 0; bolt.position.set(10, 58, -20);
+  fc(c, lerp(16, 12, u), 0.25, 1, 36, t, fl * 0.8); });
+// ===== 7 anger
+const EP = [26, 68], CP2 = [10, 72];
+shot(135.9, 140.2, 'day', (t, u) => { FOCUS = V(18, 0, 70); const k = ease(u); cromo(lerp(0, CP2[0], k), lerp(56, CP2[1], k), face([lerp(0, CP2[0], k), lerp(56, CP2[1], k)], EP), { roll: k * 20 }); cromoBlink(t);
+  place('estopim', ...EP, face(EP, CP2)); idle('estopim', t);
+  camAt(vl([10, 18, 118], [16, 14, 104], u), V(18, 9, 70), 42, t); });
+shot(140.2, 145.2, 'day', (t, u) => { FOCUS = V(18, 0, 70); cromo(...CP2, face(CP2, EP)); cromoBlink(t); const e = place('estopim', ...EP, face(EP, CP2)); stomp('estopim', t); fb(e, 26, -0.6, 3, 40, t, 0.4); });
+shot(145.2, 147.8, 'day', (t, u) => { FOCUS = V(18, 0, 70); cromo(...CP2, face(CP2, EP)); const e = place('estopim', ...EP, face(EP, CP2)); stomp('estopim', t); talk('estopim', t, true); fc(e, lerp(17, 12, u), -0.4, 1, 36, t, 0.7, -1.5); });
+shot(147.8, 154.0, 'day', (t, u) => { FOCUS = V(18, 0, 70); const c = cromo(...CP2, face(CP2, EP)); const P = c.userData.parts; cromoBlink(t);
+  const s = Math.sin(t * 9); c.position.y += s > 0 ? s * 1.2 : 0; P.wheel.rotation.x = t * 12; P.armL.rotation.z = -0.5; P.armR.rotation.z = 0.5; P.armL.rotation.x = -0.3; P.armR.rotation.x = -0.3;
+  const back = V(); P.body.getWorldPosition(back); emitter(t, 147.8, 1e9, 0.15, 1.4, (uu, age) => puff(back.x - Math.sin(c.rotation.y) * (4 + age * 4), back.y + 2 + age * 5, back.z - Math.cos(c.rotation.y) * (4 + age * 4), 1 + uu * 3));
+  place('estopim', ...EP, face(EP, CP2)); idle('estopim', t); fb(c, 26, 0.8, 3, 40, t, 0.35); });
+shot(154.0, 156.5, 'day', (t, u) => { FOCUS = V(18, 0, 70); const c = cromo(...CP2, face(CP2, EP)); cromoBlink(t, 5); place('estopim', ...EP, face(EP, CP2)); idle('estopim', t); fc(c, lerp(20, 10, ease(u)), 0.4, 0.5, 36, t); });
+shot(156.5, 157.6, 'day', (t, u) => { FOCUS = V(18, 0, 70); const c = cromo(...CP2, face(CP2, EP)); fc(c, 10, 0.4, 0.5, 36, t); });
+shot(157.6, 158.4, 'day', (t, u) => { FOCUS = V(10, 0, 20); plazaCrowd(t); camAt(V(6, 14, 46), headPos(A.petala, -3), 38, t); });
+shot(158.4, 159.2, 'storm', (t, u) => { FOCUS = V(-14, 0, 22); const g = place('goma', ...PL.goma, 0.4); tremble('goma', t, 0.5); rain(t, V(-14, 0, 22)); fc(g, 18, 0.2, 1, 38, t, 0, -2); });
+shot(159.2, 160.4, 'day', (t, u) => { FOCUS = V(26, 0, 68); const e = place('estopim', ...EP, face(EP, CP2)); stomp('estopim', t); fc(e, 18, -0.3, 1, 38, t, 0.5, -2); });
+shot(160.4, 162.8, 'day', (t, u) => { FOCUS = V(0, 0, 30); cromo(0, 30, 0); cromoBlink(t, 4); camAt(vl([0, 30, 90], [0, 55, 125], ease(u)), V(0, 8, 30), 40, t); });
+// ===== 8 home at evening
+shot(162.8, 170.7, 'evening', (t, u) => { const x = lerp(-8, -40, u), z = lerp(46, 70, u); FOCUS = V(x, 0, z);
+  const c = cromo(x, z, face([-8, 46], [-40, 70]), { roll: u * 40 }); const P = c.userData.parts; P.head.rotation.x = 0.45; P.armL.rotation.z = -0.05; P.armR.rotation.z = 0.05; cromoBlink(t, 5);
+  c.rotation.z = Math.sin(t * 3) * 0.04; fb(c, 30, 1.3, 2, 40, t); });
+shot(170.7, 174.1, 'evening', (t, u) => { FOCUS = V(-45, 0, 71); const c = cromo(HOME.door[0] + 4, HOME.door[1], Math.PI / 2); cromoTalk(t); const P = c.userData.parts; P.head.rotation.x = 0.4; cromoBlink(t, 5); fc(c, 17, 0.3, 2.5, 38, t, 0, -1); });
+// ===== 9 gate, next morning
+const VG = [-37, 71], CG = [-45, 71], VRY = -Math.PI / 2 + 0.6, CRY = Math.PI / 2 - 0.6;
+shot(174.1, 179.7, 'morning', (t, u) => { FOCUS = V(-42, 0, 71); const v = place('vira', ...VG, VRY); idle('vira', t); mala.visible = true; v.userData.parts.head.rotation.x = 0.15;
+  const k = ease(u * 1.5); const c = cromo(lerp(HOME.door[0] + 1, CG[0], k), CG[1], Math.PI / 2, { roll: k * 6 }); cromoBlink(t);
+  camAt(vl([-41, 15, 104], [-41, 13, 96], u), V(-41, 9, 71), 42, t); });
+shot(179.7, 188.1, 'morning', (t, u) => { FOCUS = V(-42, 0, 71); const v = place('vira', ...VG, VRY); talk('vira', t, true); mala.visible = true; v.userData.parts.head.rotation.x += 0.15;
+  cromo(...CG, CRY); cromoBlink(t); fc(v, lerp(16, 13, u), 0.3, 1, 36, t, 0, -1); });
+shot(188.1, 195.7, 'morning', (t, u) => { FOCUS = V(-42, 0, 71); place('vira', ...VG, VRY); mala.visible = true; idle('vira', t);
+  const c = cromo(...CG, CRY); const P = c.userData.parts; const lt = t - 188.1;
+  const off = (lt > 4.5 && lt < 4.75) || (lt > 5.5 && lt < 5.75); P.eyeL.visible = !off; P.eyeR.visible = !off; P.mouth.visible = !off;
+  fc(c, lerp(17, 12, ease(u)), -0.3, 0.5, 34, t); });
+shot(195.7, 199.9, 'morning', (t, u) => { FOCUS = V(-42, 0, 71); place('vira', ...VG, VRY); mala.visible = true; idle('vira', t);
+  const c = cromo(...CG, CRY); cromoTalk(t); c.userData.parts.head.rotation.x += 0.2 * u; cromoBlink(t); fc(c, 12, -0.3, 0.5, 34, t); });
+// ===== 10 last sunset
+shot(199.9, 205.0, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); hillPair(t); const a = toCity + lerp(-0.4, 0.3, u);
+  camAt(V(HX + Math.sin(a) * 70, 70, HZ + Math.cos(a) * 70), V(HX + 8, 50, HZ + 6), 44, t); });
+shot(205.0, 210.5, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const { v } = hillPair(t); kite(t, v.userData.parts.armRHand, V(KITE_SKY.x + 10, lerp(100, 140, ease(u)), KITE_SKY.z + 10), 1.1);
+  camAt(V(HX - 10, 52, HZ - 14), vl([HX + 10, 55, HZ + 10], [pipa.position.x, pipa.position.y, pipa.position.z], ease(u)), 50, t); });
+shot(210.5, 216.7, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const { v, c } = hillPair(t); kite(t, v.userData.parts.armRHand, V(KITE_SKY.x + 10, 140, KITE_SKY.z + 10), 1.1);
+  c.userData.parts.head.rotation.x = -0.35; fc(c, lerp(15, 12, u), -0.6, -1.5, 36, t, 0, 1); });
+// ===== 11 station
+const PX = [100, 111, 122, 134, 146, 158];
+function platform(t, list) { const ret = {}; lant.visible = false;
+  list.forEach((k, i) => { if (!k) return; if (k === 'cromo') { ret[k] = cromo(PX[i], -170, 0); ret[k].position.y = PLAT; } else { ret[k] = place(k, PX[i], -170, 0, PLAT); idle(k, t); } });
+  return ret; }
+const ALL = ['goma', 'petala', 'vira', 'cromo', 'fuzue', 'nimbo'];
+shot(216.7, 221.3, 'morning', (t, u) => { FOCUS = V(130, 0, -172); platform(t, ALL); place('estopim', 90, -170, 0.4, PLAT); idle('estopim', t); mala.visible = true; cromoBlink(t);
+  emitter(t, 216.7, 1e9, 0.4, 3, (uu, age) => puff(train.position.x - 8 + age * 3, 21 + age * 8, -185, 2 + uu * 5));
+  camAt(vl([175, 45, -100], [150, 26, -128], ease(u)), V(125, 12, -172), 44, t); });
+shot(221.3, 223.3, 'morning', (t, u) => { FOCUS = V(130, 0, -172); platform(t, ALL); mala.visible = true; const v = A.vira; v.position.x = lerp(122, 114, ease(u)); v.rotation.y = -Math.PI / 2;
+  const P = v.userData.parts; P.armL.rotation.x = -1.4; P.armR.rotation.x = -1.4; const p = A.petala; p.rotation.y = Math.PI / 2; p.userData.parts.armL.rotation.x = -1.4; p.userData.parts.armR.rotation.x = -1.4; cromoBlink(t);
+  camAt(V(114, 20, -144), V(113, 14, -170), 40, t); });
+shot(223.3, 228.6, 'morning', (t, u) => { FOCUS = V(130, 0, -172); platform(t, ALL); mala.visible = true; const v = A.vira; v.position.x = 127; v.rotation.y = Math.PI / 2 - 0.6; const c = A.cromo; c.rotation.y = -Math.PI / 2 + 0.6; cromoBlink(t);
+  const k = ease((u - 0.3) * 2.5); const P = v.userData.parts; P.armR.rotation.x = -1.1; P.armL.rotation.x = -1.1;
+  pipaHand.visible = true; pipaHand.position.set(lerp(129.5, 131.5, k), PLAT + 9, -167.5); pipaHand.rotation.set(0, 0, 0.3);
+  if (k > 0.8) { c.userData.parts.armL.rotation.x = -1.0; c.userData.parts.armR.rotation.x = -1.0; }
+  camAt(V(130.5, 20, -144), V(130.5, 14, -170), 38, t); });
+shot(228.6, 230.7, 'morning', (t, u) => { FOCUS = V(130, 0, -172); platform(t, ALL); mala.visible = true; const v = A.vira; v.position.x = 127; v.rotation.y = Math.PI / 2 - 0.6; talk('vira', t, true); A.cromo.rotation.y = -Math.PI / 2 + 0.6;
+  pipaHand.visible = true; pipaHand.position.set(131.5, PLAT + 9, -167.5); pipaHand.rotation.set(0, 0, 0.3); A.cromo.userData.parts.armL.rotation.x = -1.0; A.cromo.userData.parts.armR.rotation.x = -1.0;
+  fc(v, 14, -0.3, 1, 34, t, 0, -1); });
+shot(230.7, 235.5, 'morning', (t, u) => { FOCUS = V(130, 0, -172); platform(t, ALL); mala.visible = true; const v = A.vira; const k = ease(u * 1.4); v.position.x = 127 - k * 8; v.position.z = -170 - k * 9; v.rotation.y = Math.PI; walk('vira', t); v.visible = k < 0.98;
+  A.cromo.rotation.y = -0.3; pipaHand.visible = true; pipaHand.position.set(PX[3] + 2.5, PLAT + 9, -167.5); pipaHand.rotation.set(0, 0, 0.3);
+  emitter(t, 230.7, 1e9, 0.15, 2.5, (uu, age) => puff(train.position.x - 8 + age * 2, 21 + age * 10, -185, 2 + uu * 6));
+  camAt(V(104, 20, -144), V(124, 13, -178), 42, t); });
+shot(235.5, 243.1, 'morning', (t, u) => { FOCUS = V(125, 0, -172); platform(t, ['goma', 'petala', 'estopim', 'cromo', 'fuzue', 'nimbo']);
+  const lt = t - 235.5; train.position.x = 60 - 0.5 * 5 * lt * lt;
+  emitter(t, 235.5, 1e9, 0.15, 2.5, (uu, age, n) => { const b = n * 0.15; puff(60 - 2.5 * b * b - 8 + age * 3, 21 + age * 10, -185, 2 + uu * 6); });
+  const c = A.cromo; c.rotation.y = -Math.PI / 2 + 0.3; pipaHand.visible = true; pipaHand.position.set(PX[3] + 3, PLAT + 7, -173); pipaHand.rotation.set(0, -1.2, 0.3);
+  camAt(V(190, 16, -202), V(lerp(80, -60, ease(u)), 8, -184), 40, t); });
+// ===== 12 tears
+const PLAT5 = ['goma', 'petala', 'estopim', 'cromo', 'fuzue', 'nimbo'];
+function stationCromo(t, ry = -0.35) { platform(t, PLAT5); lant.visible = false; const c = A.cromo; c.rotation.y = ry; pipaHand.visible = true; pipaHand.position.set(PX[3] + 5.5, PLAT + 7, -172); pipaHand.rotation.set(0, 0.4, 0.3); return c; }
+shot(243.1, 253.6, 'morning', (t, u) => { FOCUS = V(130, 0, -172); const c = stationCromo(t); cromoBlink(t, 3);
+  cromoTears(t, 245.7, 250.4); if (t > 250.4) { const P = c.userData.parts; P.eyeL.position.y = 0.9; P.eyeR.position.y = 0.5; P.head.rotation.z = 0.12; }
+  fc(c, lerp(18, 8.5, ease(u)), 0.15, 0.5, 34, t); });
+shot(253.6, 259.8, 'morning', (t, u) => { FOCUS = V(130, 0, -172); const c = stationCromo(t); cromoTalk(t); cromoTears(t, 245.7, 250.4);
+  const P = c.userData.parts; P.armR.rotation.x = -1.3; P.armR.rotation.z = -0.4; P.head.rotation.x = 0.3 * ease(u * 2); fc(c, 12, 0.5, 1.5, 36, t, 0, -1); });
+shot(259.8, 264.7, 'morning', (t, u) => { FOCUS = V(130, 0, -172); const c = stationCromo(t, -0.6); cromoTears(t, 245.7, 250.4);
+  const p = A.petala; const k = ease(u * 1.3); p.position.x = lerp(PX[1], PX[3] - 8, k); p.rotation.y = Math.PI / 2; walk('petala', t, 0.5 * (1 - k)); if (k > 0.95) { p.userData.parts.armR.rotation.x = -0.6; c.userData.parts.armL.rotation.x = -0.5; }
+  camAt(V(PX[3] - 5, 20, -144), V(PX[3] - 5, 14, -170), 40, t); });
+shot(264.7, 268.6, 'morning', (t, u) => { FOCUS = V(130, 0, -172); stationCromo(t, -0.6); cromoTears(t, 245.7, 250.4);
+  const p = A.petala; p.position.x = PX[3] - 8; p.rotation.y = Math.PI / 2 - 0.6; talk('petala', t, true); p.userData.parts.armR.rotation.x = -0.6; fc(p, 15, -0.2, 0, 34, t, 0, -2); });
+shot(268.6, 272.4, 'morning', (t, u) => { FOCUS = V(130, 0, -172); const c = stationCromo(t, -0.6); cromoTears(t, 245.7, 250.4); cromoTalk(t);
+  const p = A.petala; p.position.x = PX[3] - 8; p.rotation.y = Math.PI / 2; idle('petala', t); fc(c, 10, 0.4, 0.5, 32, t); });
+// ===== 13 epilogue
+shot(272.4, 277.7, 'day', (t, u) => { const [x, z] = ROAD(u * 0.8); FOCUS = V(x, 0, z); const c = cromo(x, z, Math.PI, { roll: u * 94, box: true }); cromoBlink(t);
+  plazaCrowd(t); fb(c, 32, -0.8, 6, 42, t); });
+function hillAlone(t) { const c = cromo(...HILLC, toCity); const P = c.userData.parts; P.armR.rotation.z = 2.6; kite(t, P.armRHand, KITE_SKY, 1.1); cromoBlink(t); return c; }
+shot(277.7, 284.4, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); hillAlone(t);
+  camAt(vl([HX + 110, 60, HZ + 30], [HX + 60, 56, HZ + 50], ease(u)), V(HX + 10, 55, HZ + 10), 46, t); });
+shot(284.4, 289.0, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAlone(t); fc(c, lerp(30, 12, ease(u)), 0, 1, 36, t); });
+shot(289.0, 292.6, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAlone(t); cromoHappy(t > 289.05); fc(c, 15, 0, 0.5, lerp(34, 30, u), t); });
+shot(292.6, 300.1, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAlone(t); cromoHappy(true); cromoTalk(t, 0.4); fc(c, 15, lerp(-0.6, 0.6, u), 1, 36, t); });
+shot(300.1, 310, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAlone(t); cromoHappy(true); const h = headPos(c, -0.5); const a = toCity + 0.3;
+  const b = toCity + Math.PI - 0.6; camAt(vl([h.x + Math.sin(a) * 16, h.y + 1, h.z + Math.cos(a) * 16], [h.x + Math.sin(b) * 34, h.y + 22, h.z + Math.cos(b) * 34], ease(u)), vl([h.x, h.y, h.z], [lerp(h.x, pipa.position.x, 0.6), lerp(h.y, pipa.position.y, 0.5), lerp(h.z, pipa.position.z, 0.6)], ease(u)), 46, t); });
+
+// ------------------------------------------------ frame
+function world_anim(t) {
+  world.cloudsG.position.x = (t * 1.6) % 300 - 60;
+  world.balloons.forEach((b, i) => { const [x, y, z] = b.userData.base; b.position.set(x + Math.sin(t * 0.05 + i) * 30 + t * 0.15, y + Math.sin(t * 0.4 + i * 2) * 4, z); });
+  birds.forEach((b) => { const f = b.userData.f; const a = t * f.w + f.p; b.position.set(f.c[0] + Math.cos(a) * f.r, f.c[1] + f.h + Math.sin(a * 2) * 4, f.c[2] + Math.sin(a) * f.r);
+    b.rotation.y = -a + (f.w > 0 ? 0 : Math.PI); Wd.flap(b, t + f.p, 12); });
+}
+const fade = document.createElement('canvas');
+window.renderAt = (t, q = 0.92) => { resetAll(); world_anim(t);
+  const s = SH.find(s => t >= s.t0 && t < s.t1) || SH[SH.length - 1];
+  setTime(s.tod, FOCUS); s.fn(t, (t - s.t0) / (s.t1 - s.t0));
+  if (s.tod !== 'storm' || true) {} // setTime may be re-called by shot (flash)
+  sun.position.copy(sun.position); // keep
+  { const T = Wd.TIME[s.tod]; if (!s.fn.toString().includes('setTime')) { sun.position.set(...T.sun[2]).add(FOCUS); sun.target.position.copy(FOCUS); } }
+  const tr0 = performance.now(); r.render(S, cam); { const gl = r.getContext(); const px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); } window.LAST = { render: performance.now() - tr0, calls: r.info.render.calls, tris: r.info.render.triangles };
+  // fades
+  let a = 0; if (t < 1.2) a = 1 - t / 1.2; if (t > 306.5) a = Math.min(1, (t - 306.5) / 2.5);
+  const c = r.domElement;
+  if (a > 0) { fade.width = W; fade.height = H; const g = fade.getContext('2d'); g.drawImage(c, 0, 0); g.fillStyle = `rgba(0,0,0,${a})`; g.fillRect(0, 0, W, H); return fade.toDataURL('image/jpeg', q); }
+  const td0 = performance.now(); const out = c.toDataURL('image/jpeg', q); window.LAST.enc = performance.now() - td0; return out;
+};
+if (QP.get('lam') !== '0') { const cache = new Map(); const conv = (m) => { if (!m || !(m.isMeshStandardMaterial)) return m; if (cache.has(m)) return cache.get(m);
+    const n = new THREE.MeshLambertMaterial({ color: m.color, emissive: m.emissive, emissiveIntensity: m.emissiveIntensity, transparent: m.transparent, opacity: m.opacity });
+    cache.set(m, n); return n; };
+  S.traverse(o => { if (o.isMesh) o.material = Array.isArray(o.material) ? o.material.map(conv) : conv(o.material); });
+  for (const k in world.meshes) world.meshes[k].material = conv(world.meshes[k].material);
+  [puffMat, darkPuffMat, tearMat, oilMat].forEach(m => {}); }
+window.TOTAL = 309.4;
+window.DONE = true;
+</script></body></html>
