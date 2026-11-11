@@ -367,6 +367,14 @@ shot(292.6, 300.1, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAl
 shot(300.1, 310, 'golden', (t, u) => { FOCUS = V(HX, 40, HZ); const c = hillAlone(t); cromoHappy(true); const h = headPos(c, -0.5); const a = toCity + 0.3;
   const b = toCity + Math.PI - 0.6; camAt(vl([h.x + Math.sin(a) * 16, h.y + 1, h.z + Math.cos(a) * 16], [h.x + Math.sin(b) * 34, h.y + 22, h.z + Math.cos(b) * 34], ease(u)), vl([h.x, h.y, h.z], [lerp(h.x, pipa.position.x, 0.6), lerp(h.y, pipa.position.y, 0.5), lerp(h.z, pipa.position.z, 0.6)], ease(u)), 46, t); });
 
+// ===== miniatura (thumbnail) — fora da linha do tempo do vídeo
+window.TH = { ang: -0.55, d: 17, dy: -3, fov: 40, side: 6, tear: 1, ly: 3 };
+shot(1000, 1001, 'golden', (t, u) => { const T = window.TH; FOCUS = V(HX, 40, HZ); const c = hillAlone(305); cromoHappy(true);
+  if (T.tear) cromoTears(8 + T.tear, 8, null);
+  const h = headPos(c, -0.5); const a = c.rotation.y + T.ang; const r = a + Math.PI / 2;
+  const look = V(h.x + Math.sin(r) * T.side, h.y + T.ly, h.z + Math.cos(r) * T.side);
+  camAt(V(h.x + Math.sin(a) * T.d, h.y + T.dy, h.z + Math.cos(a) * T.d), look, T.fov, 0); });
+
 // ------------------------------------------------ frame
 function world_anim(t) {
   world.cloudsG.position.x = (t * 1.6) % 300 - 60;
@@ -383,7 +391,7 @@ window.renderAt = (t, q = 0.92) => { resetAll(); world_anim(t);
   { const T = Wd.TIME[s.tod]; if (!s.fn.toString().includes('setTime')) { sun.position.set(...T.sun[2]).add(FOCUS); sun.target.position.copy(FOCUS); } }
   const tr0 = performance.now(); r.render(S, cam); { const gl = r.getContext(); const px = new Uint8Array(4); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); } window.LAST = { render: performance.now() - tr0, calls: r.info.render.calls, tris: r.info.render.triangles };
   // fades
-  let a = 0; if (t < 1.2) a = 1 - t / 1.2; if (t > 306.5) a = Math.min(1, (t - 306.5) / 2.5);
+  let a = 0; if (t < 1.2) a = 1 - t / 1.2; if (t > 306.5 && t < 900) a = Math.min(1, (t - 306.5) / 2.5);
   const c = r.domElement;
   if (a > 0) { fade.width = W; fade.height = H; const g = fade.getContext('2d'); g.drawImage(c, 0, 0); g.fillStyle = `rgba(0,0,0,${a})`; g.fillRect(0, 0, W, H); return fade.toDataURL('image/jpeg', q); }
   const td0 = performance.now(); const out = c.toDataURL('image/jpeg', q); window.LAST.enc = performance.now() - td0; return out;
