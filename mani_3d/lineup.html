@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head><body>
+<script type="module">
+import * as THREE from 'three';
+import * as C from './src/chars.js';
+const W=1920,H=1080;
+const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true}); r.setSize(W,H); r.shadowMap.enabled=true; r.shadowMap.type=THREE.PCFSoftShadowMap;
+r.outputColorSpace=THREE.SRGBColorSpace; r.toneMapping=THREE.ACESFilmicToneMapping; r.toneMappingExposure=1.05; document.body.appendChild(r.domElement);
+const s=new THREE.Scene(); s.background=new THREE.Color(0xe9e2db);
+s.add(new THREE.HemisphereLight(0xffffff,0xc9b8a8,1.6));
+const d=new THREE.DirectionalLight(0xffffff,2.4); d.position.set(30,60,50); d.castShadow=true; d.shadow.mapSize.set(4096,4096);
+Object.assign(d.shadow.camera,{left:-60,right:60,top:40,bottom:-10,near:1,far:200}); d.shadow.radius=4; s.add(d);
+const fill=new THREE.DirectionalLight(0xffeedd,0.8); fill.position.set(-40,20,40); s.add(fill);
+const g=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.ShadowMaterial({opacity:0.22})); g.rotation.x=-Math.PI/2; g.receiveShadow=true; s.add(g);
+const list=[['cromo',C.cromo],['viraVento',C.viraVento],['petala',C.petala],['fuzue',C.fuzue],['goma',C.goma],['nimbo',C.nimbo],['estopim',C.estopim]];
+const sp=14.6; const objs={};
+list.forEach(([n,f],i)=>{const o=f(); o.position.x=(i-3)*sp; o.rotation.y=-(i-3)*0.06; s.add(o); objs[n]=o;});
+const P=n=>objs[n].userData.parts;
+// props + poses
+P('cromo').armR.rotation.z=0.5; P('cromo').armL.rotation.z=-0.3; P('cromo').head.rotation.z=0.06;
+const pp=C.pipa(); pp.scale.setScalar(0.7); pp.position.set(-7.5,21,-3); pp.rotation.set(0,0.2,0.3); objs.viraVento.add(pp); P('viraVento').armL.rotation.z=-2.4;
+P('petala').armL.rotation.z=-2.2; P('petala').armR.rotation.z=1.2; P('petala').legR.rotation.x=-0.5; P('petala').body.rotation.z=0.05;
+const tb=C.tambor(); tb.position.set(3.6,4.6,3.6); objs.fuzue.add(tb); for(const [a,k] of [['armL',-1],['armR',1]]){P('fuzue')[a].rotation.x=-1.0; P('fuzue')[a].rotation.z=k*0.2; const b=C.baqueta(); b.rotation.x=1.2; P('fuzue')[a+'Hand'].add(b);}
+P('goma').armL.rotation.z=-0.5; P('goma').armR.rotation.z=0.6; P('goma').head.rotation.z=0.12;
+const cj=C.cajado(); cj.position.set(5.6,8,1.4); objs.nimbo.add(cj); P('nimbo').armR.rotation.z=0.35; P('nimbo').armR.rotation.x=-0.3;
+const ln=C.lanterna(); ln.position.set(5.9,6.2,1.6); objs.estopim.add(ln); P('estopim').armR.rotation.z=0.3; P('estopim').armR.rotation.x=-0.25;
+const cam=new THREE.PerspectiveCamera(30,W/H,1,500); cam.position.set(0,19,124); cam.lookAt(0,13,0);
+r.render(s,cam); window.DONE=true;
+</script></body></html>
